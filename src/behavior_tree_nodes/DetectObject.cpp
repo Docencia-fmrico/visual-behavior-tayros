@@ -40,7 +40,7 @@ DetectObject::tick()
 {
   ROS_INFO("DetectObject tick");
 
-  return BT::NodeStatus::RUNNING;
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace behavior_trees

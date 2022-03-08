@@ -4,10 +4,15 @@
         <ReactiveSequence>
 
             <!-- Searchs the object -->
-            <Fallback>
-                <DetectObject name="detect_object" object="{object}"/>
-                <Turn name="Turn"/>
-            </Fallback>
+            <RetryUntilSuccesful num_attempts="100">
+                <Fallback>
+                    <DetectObject name="detect_object" object="{object}"/>
+                    <Inverter>
+                        <Turn name="Turn"/>
+                    </Inverter>
+                </Fallback>
+            </RetryUntilSuccesful>
+
 
             <!-- Goes to the object -->
             <ReactiveSequence>

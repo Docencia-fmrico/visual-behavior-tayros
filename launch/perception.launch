@@ -1,0 +1,16 @@
+<launch>
+
+	<node pkg="visual_behavior" type="color_filter_node" name="PerceptionFilter" output="screen">
+		<rosparam command="load" file="$(find visual_behavior)/config/color_filter.yaml"/>
+	</node>
+
+	<node 
+		pkg="cameras_cpp" type="nodo_rgbd_filter" name="PerceptionCloud" output="screen">
+	</node>
+
+	<node 
+		pkg="cameras_cpp" type="nodo_rgbd_tf" name="PerceptionTf" output="screen">
+	</node>
+
+
+</launch>

@@ -9,19 +9,39 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
   kobuki_msgs
   sensor_msgs
+  tf
+  cv_bridge
+  image_transport
+  pcl_conversions
+  pcl_ros
 )
 
 catkin_package(
-CATKIN_DEPENDS roscpp std_msgs kobuki_msgs sensor_msgs sensor_msgs
+CATKIN_DEPENDS 
+  roscpp 
+  std_msgs 
+  kobuki_msgs 
+  sensor_msgs 
+  sensor_msgs
+  tf
+  cv_bridge
+  image_transport
+  pcl_conversions
+  pcl_ros
 )
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  include
+  ${PCL_INCLUDE_DIRS}
 )
 
-add_executable(perception_node src/perception_node.cpp)
+link_directories(
+	${PCL_LIBRARY_DIRS}
+)
 
+
+add_executable(color_filter_node src/color_filter_node.cpp)
+target_link_libraries(color_filter_node ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 # add_executable()
 
@@ -30,7 +50,7 @@ add_executable(perception_node src/perception_node.cpp)
 
 
 roslint_cpp(
-  src/perception_node.cpp
+  src/color_filter_node.cpp
 )
 
 

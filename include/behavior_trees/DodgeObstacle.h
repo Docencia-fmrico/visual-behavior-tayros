@@ -13,38 +13,42 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <string>
-#include "behavior_trees/DetectObject.h"
-#include "behaviortree_cpp_v3/behavior_tree.h"
-#include "ros/ros.h"
+#ifndef BEHAVIOR_TREES_DODGEOBSTACLE_H
+#define BEHAVIOR_TREES_DODGEOBSTACLE_H
 
+#include "behaviortree_cpp_v3/behavior_tree.h"
+#include "behaviortree_cpp_v3/bt_factory.h"
+
+#include <string>
+#include <geometry_msgs/Twist.h>
+
+#include "ros/ros.h"
 
 namespace behavior_trees
 {
 
-DetectObject::DetectObject(const std::string& name,  const BT::NodeConfiguration & config)
-: BT::ActionNodeBase(name, {}), counter_(0)
+class DodgeObstacle : public BT::ActionNodeBase
 {
-}
+  public:
+    explicit DodgeObstacle(const std::string& name, const BT::NodeConfiguration& config);
 
-void
-DetectObject::halt()
-{
-  ROS_INFO("DetectObject halt");
-}
+    void halt();
 
-BT::NodeStatus
-DetectObject::tick()
-{
-  ROS_INFO("DetectObject tick");
+    BT::NodeStatus tick();
 
-  return BT::NodeStatus::SUCCESS;
-}
+
+    static BT::PortsList providedPorts()
+    {
+        return { BT::InputPort<std::string>("object")};
+    }
+
+  private:
+    ros::NodeHandle nh_;
+    ros::Publisher pub_vel_;
+
+    int counter_;
+};
 
 }  // namespace behavior_trees
 
-#include "behaviortree_cpp_v3/bt_factory.h"
-BT_REGISTER_NODES(factory)
-{
-  factory.registerNodeType<behavior_trees::DetectObject>("DetectObject");
-}
+#endif  // BEHAVIOR_TREES_DODGEOBSTACLE_H

@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   factory.registerFromPlugin(loader.getOSName("approach_object_bt_node"));
   factory.registerFromPlugin(loader.getOSName("calculate_distance_bt_node"));
   factory.registerFromPlugin(loader.getOSName("detect_object_bt_node"));
-  factory.registerFromPlugin(loader.getOSName("is_something_near_bt_node"));
+
   factory.registerFromPlugin(loader.getOSName("turn_bt_node"));
 
   auto blackboard = BT::Blackboard::create();

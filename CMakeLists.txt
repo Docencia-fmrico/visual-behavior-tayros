@@ -36,12 +36,15 @@ add_library(calculate_distance_bt_node SHARED src/behavior_tree_nodes/CalculateD
 add_library(detect_object_bt_node SHARED src/behavior_tree_nodes/DetectObject.cpp )
 add_library(is_something_near_bt_node SHARED src/behavior_tree_nodes/IsSomethingNear.cpp)
 add_library(turn_bt_node SHARED src/behavior_tree_nodes/Turn.cpp)
+add_library(dodge_obstacle_node SHARED src/behavior_tree_nodes/DodgeObstacle.cpp)
+
 list(APPEND plugin_libs
   approach_object_bt_node
   calculate_distance_bt_node
   detect_object_bt_node
   is_something_near_bt_node
   turn_bt_node
+  dodge_obstacle_node
 )
 
 foreach(bt_plugin ${plugin_libs})

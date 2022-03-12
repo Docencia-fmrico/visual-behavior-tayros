@@ -13,22 +13,8 @@
                 </Fallback>
             </RetryUntilSuccesful>
 
+            <ApproachObject name="approach" object="{object}"/>
 
-            <!-- Goes to the object -->
-            <ReactiveSequence>
-                <CalculateDistance name="calculate_distance" object="{object}"/>
-                <ApproachObject name="approach" object="{object}"/>
-                
-                <!-- If something is near the robot turns -->
-                <ReactiveFallback>
-                    <Inverter>
-                        <IsSomethingNear name="is_something_near"/>
-                    </Inverter>
-                <!--    <GoBack name="go_back"\> -->
-                    <Turn name="Turn"/>
-                </ReactiveFallback>
-                
-            </ReactiveSequence>
         </ReactiveSequence>
     </BehaviorTree>
 

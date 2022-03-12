@@ -14,31 +14,42 @@
 // limitations under the License.
 
 #include <string>
-#include "behavior_trees/DetectObject.h"
-#include "behaviortree_cpp_v3/behavior_tree.h"
-#include "ros/ros.h"
+#include <geometry_msgs/Twist.h>
 
+#include "behavior_trees/DodgeObstacle.h"
+#include "behaviortree_cpp_v3/behavior_tree.h"
+
+
+#include "ros/ros.h"
 
 namespace behavior_trees
 {
 
-DetectObject::DetectObject(const std::string& name,  const BT::NodeConfiguration & config)
+DodgeObstacle::DodgeObstacle(const std::string& name, const BT::NodeConfiguration & config)
 : BT::ActionNodeBase(name, {}), counter_(0)
 {
+  std::string pub_vel_path =  nh_.param("pub_vel_path", std::string("/mobile_base/commands/velocity"));
+  pub_vel_ = nh_.advertise<geometry_msgs::Twist>(pub_vel_path, 1);
 }
 
 void
-DetectObject::halt()
+DodgeObstacle::halt()
 {
-  ROS_INFO("DetectObject halt");
+  ROS_INFO("DodgeObstacle halt");
 }
 
 BT::NodeStatus
-DetectObject::tick()
+DodgeObstacle::tick()
 {
-  ROS_INFO("DetectObject tick");
+  geometry_msgs::Twist cmd;
 
-  return BT::NodeStatus::SUCCESS;
+  ROS_INFO("DodgeObstacle tick");
+  cmd.linear.x = -1;
+  cmd.angular.z = 1;
+
+
+  pub_vel_.publish(cmd);
+  return BT::NodeStatus::RUNNING;
 }
 
 }  // namespace behavior_trees
@@ -46,5 +57,5 @@ DetectObject::tick()
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<behavior_trees::DetectObject>("DetectObject");
+  factory.registerNodeType<behavior_trees::DodgeObstacle>("DodgeObstacle");
 }

@@ -48,7 +48,7 @@ ApproachObject::tick()
   std::string object = getInput<std::string>("object").value();
   ROS_INFO("ApproachObject [%s] tick %d", object.c_str(), counter_);
 
-  if (counter_++ < 50)
+  if (counter_++ < 300)
   {
     geometry_msgs::Twist msg;
     msg.linear.x = 0.4;

@@ -14,12 +14,12 @@
 
 
 #include <ros/ros.h>
-#include "visual_behavior/ColorFilter.h"
+#include "visual_behavior/RGBDFilter.h"
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "color_filter_node");
-  visual_behavior::ColorFilter filter;
+  ros::init(argc, argv, "rgbd_filter");
+  visual_behavior::RGBDFilter rf;
   ros::spin();
   return 0;
 }

@@ -9,7 +9,7 @@
 	</node>
 
 	<node 
-		pkg="cameras_cpp" type="nodo_rgbd_tf" name="PerceptionTf" output="screen">
+		pkg="visual_behavior" type="nodo_rgbd_tf" name="PerceptionTf" output="screen">
 	</node>
 
 

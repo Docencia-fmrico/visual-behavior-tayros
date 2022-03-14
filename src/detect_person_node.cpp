@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <ros/ros.h>
-#include "visual_behavior/ColorFilter.h"
+#include <darknet_ros>
 
-int main(int argc, char** argv)
+class PersonDetector
 {
-  ros::init(argc, argv, "color_filter_node");
-  visual_behavior::ColorFilter filter;
-  ros::spin();
-  return 0;
-}
+  ros::NodeHandle nh_;
+
+public:
+  PersonDetector(): it_(nh_)
+  {
+
+
+
+  }

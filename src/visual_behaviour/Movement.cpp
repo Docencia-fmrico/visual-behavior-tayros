@@ -30,7 +30,7 @@ namespace visual_behaviour
 
 Movement::Movement()
 {
-    ros::Publisher vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
+  vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
 }
 
 void
@@ -39,7 +39,7 @@ Movement::MoveRobot()
     tf2_ros::Buffer buffer;
     tf2_ros::TransformListener listener(buffer);
 
-    if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(0.1), &error_))
+    if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
     {
       bf2object_msg_ = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
 

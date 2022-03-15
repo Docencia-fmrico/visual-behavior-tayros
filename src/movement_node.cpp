@@ -19,12 +19,12 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "movement");
 
-  visual_behaviour::Movement visual_behaviour;
+  visual_behaviour::Movement movement;
 
-  ros::Rate loop_rate(1);
+  ros::Rate loop_rate(20);
   while (ros::ok())
   {
-    visual_behaviour.MoveRobot();
+    movement.MoveRobot();
 
     ros::spinOnce();
     loop_rate.sleep();

@@ -28,7 +28,8 @@ namespace behavior_trees
 ApproachObject::ApproachObject(const std::string& name, const BT::NodeConfiguration & config)
 : BT::ActionNodeBase(name, config), counter_(0)
 {
-  vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+  std::string sub_movement_topic =  nh_.param("movement_topic", std::string("/mobile_base/commands/velocity"));
+  vel_pub_ = nh_.advertise<geometry_msgs::Twist>(sub_movement_topic, 1);
 }
 
 void

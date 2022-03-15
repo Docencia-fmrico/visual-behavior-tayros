@@ -53,9 +53,11 @@ foreach(bt_plugin ${plugin_libs})
 endforeach()
 
 add_executable(perception_node src/perception_node.cpp)
-add_executable(follow_human src/follow_human.cpp)
+add_executable(follow_1object src/follow_1object.cpp)
+add_executable(follow_2objects src/follow_2objects.cpp)
 
-target_link_libraries(follow_human ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+target_link_libraries(follow_1object ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+target_link_libraries(follow_2objects ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
 
 
 # add_executable()
@@ -66,7 +68,8 @@ target_link_libraries(follow_human ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
 
 roslint_cpp(
   src/perception_node.cpp
-  src/follow_human.cpp
+  src/follow_1object.cpp
+  src/follow_2objects.cpp
 )
 
 

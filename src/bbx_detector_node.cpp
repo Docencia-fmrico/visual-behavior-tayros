@@ -12,14 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#include <ros/ros.h>
-#include "ball_perception/RGBDtf.h"
+#include <message_filters/subscriber.h>
+#include <message_filters/time_synchronizer.h>
+#include <message_filters/sync_policies/approximate_time.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/Image.h>
+#include <darknet_ros_msgs/BoundingBoxes.h>
+#include "human_perception/BBXDetector.h"
+#include "visual_behavior/position.h"
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "rgbd_tf");
-  ball_perception::RGBDtf rgbdrf;
-  ros::spin();
+  ros::init(argc, argv, "bbx");
+  human_perception::BBXDetector bbx;
+
+  ros::Rate loop_rate(20);
+  while (ros::ok())
+  {
+    bbx.publish_position();
+
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
+  bbx.publish_position();
+
   return 0;
 }

@@ -19,9 +19,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <std_msgs/Float32.h>
-#include "visual_behavior/ColorFilter.h"
+#include "ball_perception/ColorFilter.h"
 
-namespace visual_behavior
+namespace ball_perception
 {
 
 ColorFilter::ColorFilter()

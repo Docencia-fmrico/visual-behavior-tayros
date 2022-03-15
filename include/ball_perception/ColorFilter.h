@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef VISUAL_BEHAVIOUR_COLORFILTER_H
-#define VISUAL_BEHAVIOUR_COLORFILTER_H
+#ifndef BALL_PERCEPTION_COLORFILTER_H
+#define BALL_PERCEPTION_COLORFILTER_H
 
 
 #include <ros/ros.h>
@@ -26,7 +26,7 @@
 
 enum {IDX_h, IDX_H, IDX_s, IDX_S, IDX_v, IDX_V, NUM_HSV};
 
-namespace visual_behavior
+namespace ball_perception
 {
 
 typedef struct
@@ -61,4 +61,4 @@ private:
 };
 }
 
-#endif  // VISUAL_BEHAVIOUR_COLORFILTER_H
+#endif  // BALL_PERCEPTION_COLORFILTER_H

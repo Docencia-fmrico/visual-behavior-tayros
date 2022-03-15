@@ -14,12 +14,12 @@
 
 
 #include <ros/ros.h>
-#include "visual_behavior/RGBDFilter.h"
+#include "ball_perception/RGBDFilter.h"
 
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "rgbd_filter");
-  visual_behavior::RGBDFilter rf;
+  ball_perception::RGBDFilter rf;
   ros::spin();
   return 0;
 }

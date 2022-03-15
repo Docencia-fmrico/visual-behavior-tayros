@@ -25,9 +25,9 @@
 #include <std_msgs/Float32.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <boost/algorithm/string.hpp>
-#include "visual_behavior/RGBDFilter.h"
+#include "ball_perception/RGBDFilter.h"
 
-namespace visual_behavior
+namespace ball_perception
 {
 
 RGBDFilter::RGBDFilter()

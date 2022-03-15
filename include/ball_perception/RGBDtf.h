@@ -12,56 +12,52 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef VISUAL_BEHAVIOUR_RGBDFILTER_H
-#define VISUAL_BEHAVIOUR_RGBDFILTER_H
+#ifndef BALL_PERCEPTION_RGBDTF_H
+#define BALL_PERCEPTION_RGBDTF_H
 
 #include <string>
-#include <vector>
 #include <ros/ros.h>
 #include <ros/console.h>
 #include <pcl/point_types.h>
+#include <pcl/conversions.h>
+#include <pcl/common/transforms.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/filters/voxel_grid.h>
 #include <pcl_conversions/pcl_conversions.h>
-#include <pcl/point_types_conversion.h>
+#include <pcl/octree/octree_search.h>
+#include <pcl/octree/octree.h>
+#include <pcl/io/ply_io.h>
+#include <pcl_ros/transforms.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_listener.h>
+#include <tf/message_filter.h>
+#include <message_filters/subscriber.h>
 #include <std_msgs/Float32.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <boost/algorithm/string.hpp>
 
-enum {IDX_h, IDX_H, IDX_s, IDX_S, IDX_v, IDX_V, NUM_HSV};
-
-namespace visual_behavior
+namespace ball_perception
 {
 
-typedef struct
-{
-  float hsv[NUM_HSV];
-  ros::Subscriber hsv_subs[NUM_HSV];
-  ros::Publisher cloud_pub_;
-}
-HSVInfo;
-
-class RGBDFilter
+class RGBDtf
 {
 public:
-  RGBDFilter();
+  RGBDtf();
   void cloudCB(const sensor_msgs::PointCloud2::ConstPtr& cloud_in);
-  void hsvCB(const ros::MessageEvent<std_msgs::Float32 const>& event);
-
 
 private:
-  void printHSV();
-  bool isValid(int channel, const pcl::PointXYZHSV& hsv);
-  void initHSV();
-
-  static const int MAX_CHANNELS = 3;
-
   ros::NodeHandle nh_;
 
-  ros::Subscriber cloud_sub_;
+  tf::TransformBroadcaster tfBroadcaster_;
+  tf::TransformListener tfListener_;
 
-  HSVInfo hsvFilters_[MAX_CHANNELS];
+  tf::MessageFilter<sensor_msgs::PointCloud2>* tfPointCloudSub_;
+  message_filters::Subscriber<sensor_msgs::PointCloud2>* pointCloudSub_;
+
+  std::string objectFrameId_;
+  std::string workingFrameId_;
+  std::string cameraTopicId_;
 };
 }
 
-#endif  // VISUAL_BEHAVIOUR_RGBDFILTER_H
+#endif  // BALL_PERCEPTION_RGBDTF_H

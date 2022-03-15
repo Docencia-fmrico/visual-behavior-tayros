@@ -32,9 +32,9 @@
 #include <std_msgs/Float32.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <boost/algorithm/string.hpp>
-#include "visual_behavior/RGBDtf.h"
+#include "ball_perception/RGBDtf.h"
 
-namespace visual_behavior
+namespace ball_perception
 {
 
 RGBDtf::RGBDtf(): objectFrameId_("/object/0")

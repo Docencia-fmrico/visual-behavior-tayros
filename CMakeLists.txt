@@ -14,10 +14,22 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   pcl_conversions
   pcl_ros
+  message_generation
+  darknet_ros_msgs
 )
 
 find_package(OpenCV)
 include_directories(${OpenCV_INCLUDE_DIRS})
+
+add_message_files(
+  FILES
+  position.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 catkin_package(
 CATKIN_DEPENDS 
@@ -31,6 +43,7 @@ CATKIN_DEPENDS
   image_transport
   pcl_conversions
   pcl_ros
+  message_runtime
 )
 
 
@@ -48,33 +61,38 @@ add_definitions(${PCL_DEFINITIONS})
 
 
 add_library(${PROJECT_NAME} 
-  src/visual_behavior/ColorFilter.cpp
-  src/visual_behavior/RGBDFilter.cpp
-  src/visual_behavior/RGBDtf.cpp
+  src/ball_perception/ColorFilter.cpp
+  src/ball_perception/RGBDFilter.cpp
+  src/ball_perception/RGBDtf.cpp
+  src/human_perception/BBXDetector.cpp
 )
 
 add_executable(color_filter_node src/color_filter_node.cpp)
 target_link_libraries(color_filter_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-add_executable(rgbd_filter_node.cpp src/rgbd_filter_node.cpp)
-target_link_libraries(rgbd_filter_node.cpp ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_executable(rgbd_filter_node src/rgbd_filter_node.cpp)
+target_link_libraries(rgbd_filter_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
-add_executable(rgbd_tf_node.cpp src/rgbd_tf_node.cpp)
-target_link_libraries(rgbd_tf_node.cpp ${PROJECT_NAME} ${catkin_LIBRARIES})
+add_executable(rgbd_tf_node src/rgbd_tf_node.cpp)
+target_link_libraries(rgbd_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(bbx_detector_node src/bbx_detector_node.cpp)
+target_link_libraries(bbx_detector_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 
 roslint_cpp(
   src/color_filter_node.cpp
   src/rgbd_filter_node.cpp
   src/rgbd_tf_node.cpp
+  src/bbx_detector_node.cpp
 
-  src/visual_behavior/ColorFilter.cpp
-  src/visual_behavior/RGBDFilter.cpp
-  src/visual_behavior/RGBDtf.cpp
+  src/ball_perception/ColorFilter.cpp
+  src/ball_perception/RGBDFilter.cpp
+  src/ball_perception/RGBDtf.cpp
 
-  include/visual_behavior/ColorFilter.h
-  include/visual_behavior/RGBDFilter.h
-  include/visual_behavior/RGBDtf.h
+  include/ball_perception/ColorFilter.h
+  include/ball_perception/RGBDFilter.h
+  include/ball_perception/RGBDtf.h
 )
 
 

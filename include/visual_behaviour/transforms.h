@@ -1,4 +1,3 @@
-
 // Copyright 2019 Intelligent Robotics Lab
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,30 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BEHAVIOR_TREES_ISSOMETHINGNEAR_H
-#define BEHAVIOR_TREES_ISSOMETHINGNEAR_H
+#ifndef GEOMETRY_TF_TRANSFORMS_H
+#define GEOMETRY_TF_TRANSFORMS_H
 
-#include "behaviortree_cpp_v3/behavior_tree.h"
-#include "behaviortree_cpp_v3/bt_factory.h"
+#include "tf2/transform_datatypes.h"
+#include "tf2/LinearMath/Transform.h"
 
-#include <string> 
-
-namespace behavior_trees
+namespace geometry_tf
 {
 
-class IsSomethingNear : public BT::ActionNodeBase
-{
-  public:
-    explicit IsSomethingNear(const std::string& name);
+tf2::Vector3 transform_point(const tf2::Vector3 & input_point, const tf2::Transform & transform);
 
-    void halt();
-
-    BT::NodeStatus tick();
-
-  private:
-    int counter_;
-};
-
-}  // namespace behavior_trees
-
-#endif  // BEHAVIOR_TREES_ISSOMETHINGNEAR_H
+}  // namespace geometry_tf
+#endif  // GEOMETRY_TF_TRANSFORMS_H

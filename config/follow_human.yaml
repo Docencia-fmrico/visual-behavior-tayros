@@ -1,0 +1,4 @@
+detection_topic: /ejemplo
+movement_topic: /mobile_base/commands/velocity
+
+turning_vel: 0.5

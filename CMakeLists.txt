@@ -24,36 +24,104 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   kobuki_msgs
   sensor_msgs
-  behaviortree_cpp_v3
+  tf
+  cv_bridge
+  image_transport
+  pcl_conversions
+  pcl_ros
+  message_generation
+  darknet_ros_msgs
+)
+
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+add_message_files(
+  FILES
+  position.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
 )
 
 catkin_package(
-   INCLUDE_DIRS include
-   LIBRARIES 
-    visual_behaviour
-   CATKIN_DEPENDS 
-    geometry_msgs 
-    tf2_geometry_msgs 
-    roscpp 
-    tf2 
-    tf2_ros
-    roslint
-    std_msgs
-    kobuki_msgs
-    sensor_msgs
-    behaviortree_cpp_v3
+  CATKIN_DEPENDS 
+  INCLUDE_DIRS include
+  LIBRARIES
+  visual_behaviour
+  geometry_msgs
+  tf2_geometry_msgs
+  roscpp 
+  std_msgs 
+  kobuki_msgs 
+  sensor_msgs 
+  roslint
+  tf
+  tf2
+  tf2_ros
+  cv_bridge
+  image_transport
+  pcl_conversions
+  pcl_ros
+  message_runtime
+  behaviortree_cpp_v3
 )
+
 
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
   ${ZMQ_INCLUDE_DIRS}
 )
+
+link_directories(
+	${PCL_LIBRARY_DIRS}
+)
+
+add_definitions(${PCL_DEFINITIONS})
+
+
+add_library(${PROJECT_NAME} 
+  src/ball_perception/ColorFilter.cpp
+  src/ball_perception/RGBDFilter.cpp
+  src/ball_perception/RGBDtf.cpp
+  src/human_perception/BBXDetector.cpp
+  src/human_perception/BBXToTf.cpp
+  src/visual_behaviour/Movement.cpp
+  src/visual_behaviour/PIDController.cpp
+  src/visual_behaviour/transforms.cpp)
 
 add_library(approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)
 add_library(calculate_distance_bt_node SHARED src/behavior_tree_nodes/CalculateDistance.cpp)
 add_library(detect_object_bt_node SHARED src/behavior_tree_nodes/DetectObject.cpp )
 add_library(turn_bt_node SHARED src/behavior_tree_nodes/Turn.cpp)
+
+add_executable(color_filter_node src/color_filter_node.cpp)
+target_link_libraries(color_filter_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(rgbd_filter_node src/rgbd_filter_node.cpp)
+target_link_libraries(rgbd_filter_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(rgbd_tf_node src/rgbd_tf_node.cpp)
+target_link_libraries(rgbd_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(bbx_detector_node src/bbx_detector_node.cpp)
+target_link_libraries(bbx_detector_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(bbx_tf_node src/bbx_tf_node.cpp)
+target_link_libraries(bbx_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(movement_node src/movement_node.cpp)
+add_executable(follow_1object src/follow_1object.cpp)
+add_executable(follow_2objects src/follow_2objects.cpp)
+
+target_link_libraries(movement_node ${LINK_LIBS})
+target_link_libraries(follow_1object ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+target_link_libraries(follow_2objects ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+
 
 list(APPEND plugin_libs
   approach_object_bt_node
@@ -67,28 +135,35 @@ foreach(bt_plugin ${plugin_libs})
   target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
 endforeach()
 
-add_library(${PROJECT_NAME}
-  src/visual_behaviour/Movement.cpp
-  src/visual_behaviour/PIDController.cpp
-  src/visual_behaviour/transforms.cpp
-)
 
-set(LINK_LIBS
-  visual_behaviour
-  ${catkin_LIBRARIES}
-)
 
-add_executable(movement_node src/movement_node.cpp)
-add_executable(follow_1object src/follow_1object.cpp)
-add_executable(follow_2objects src/follow_2objects.cpp)
-
-target_link_libraries(movement_node ${LINK_LIBS})
-target_link_libraries(follow_1object ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
-target_link_libraries(follow_2objects ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
 
 roslint_cpp(
+  src/color_filter_node.cpp
+  src/rgbd_filter_node.cpp
+  src/rgbd_tf_node.cpp
+  src/bbx_detector_node.cpp
+  src/bbx_tf_node.cpp
+
+  src/ball_perception/ColorFilter.cpp
+  src/ball_perception/RGBDFilter.cpp
+  src/ball_perception/RGBDtf.cpp
+  src/human_perception/BBXDetector.cpp
+  src/human_perception/BBXToTf.cpp
+
+  include/ball_perception/ColorFilter.h
+  include/ball_perception/RGBDFilter.h
+  include/ball_perception/RGBDtf.h
+  include/human_perception/BBXDetector.h
+  include/human_perception/BBXToTf.h
+  
   src/visual_behaviour/transforms.cpp include/visual_behaviour/transforms.h
   src/movement_node.cpp
   src/follow_1object.cpp
   src/follow_2objects.cpp
+
+set(LINK_LIBS
+  visual_behaviour
+  ${catkin_LIBRARIES}
+
 )

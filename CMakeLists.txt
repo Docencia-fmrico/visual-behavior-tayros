@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(visual_behaviour)
+
 set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
+set(CMAKE_CXX_FLAGS "-std=c++17")
+
+
+find_package(ZMQ)
+if(ZMQ_FOUND)
+    message(STATUS "ZeroMQ found.")
+    add_definitions(-DZMQ_FOUND)
+else()
+  message(WARNING "ZeroMQ NOT found. Not including PublisherZMQ.")
+endif()
 
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
@@ -18,7 +29,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(
    INCLUDE_DIRS include
-   LIBRARIES visual_behaviour
+   LIBRARIES 
+    visual_behaviour
    CATKIN_DEPENDS 
     geometry_msgs 
     tf2_geometry_msgs 
@@ -35,6 +47,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${ZMQ_INCLUDE_DIRS}
 )
 
 add_library(approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)

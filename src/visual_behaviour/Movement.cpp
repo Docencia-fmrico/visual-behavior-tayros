@@ -24,6 +24,7 @@
 #include "ros/ros.h"
 #include "visual_behaviour/PIDController.h"
 #include "visual_behaviour/Movement.h"
+#include "std_msgs/Int32.h"
 
 namespace visual_behaviour
 {
@@ -33,44 +34,62 @@ Movement::Movement()
   tilt_pid_(-1.0, 1.0, 0.0, 0.1)
 {
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
+  mov_sub_ = n.subscribe<std_msgs::Int32>("/visual_behavior/move_tf", 1, &Movement::callback, this);
 }
 
 void
-Movement::MoveRobot()
+Movement::callback(const std_msgs::Int32::ConstPtr& msg)
 {
-    tf2_ros::Buffer buffer;
-    tf2_ros::TransformListener listener(buffer);
+  movement_ = msg->data;
+}
 
-    if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
-    {
-      bf2object_msg_ = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
+void
+Movement::get_dist_angle_tf()
+{
+  tf2_ros::Buffer buffer;
+  tf2_ros::TransformListener listener(buffer);
+  if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
+ {
+    bf2object_msg_ = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
 
-      tf2::fromMsg(bf2object_msg_, bf2object_);
+    tf2::fromMsg(bf2object_msg_, bf2object_);
 
-      dist_ = bf2object_.getOrigin().length();
-      angle_ = atan2(bf2object_.getOrigin().y(),bf2object_.getOrigin().x());
-
-      double control_pan = pan_pid_.get_output(angle_);
-      double control_tilt = tilt_pid_.get_output(dist_);
-
-      ROS_INFO("base_footprint -> object [%lf, %lf] dist = %lf angle = %lf control_pan = %lf control_tilt = %lf ago",
-        bf2object_.getOrigin().x(),
-        bf2object_.getOrigin().y(),
-        dist_,
-        angle_, 
-        control_pan,
-        control_tilt,
-        (ros::Time::now() - bf2object_.stamp_).toSec());
-
-      geometry_msgs::Twist vel_msgs;
-      vel_msgs.linear.x = dist_ - control_tilt -1.0;
-      vel_msgs.angular.z = angle_ - control_pan;
-      vel_pub_.publish(vel_msgs);
+    dist_ = bf2object_.getOrigin().length();
+    angle_ = atan2(bf2object_.getOrigin().y(),bf2object_.getOrigin().x());
     }
     else
     {
       ROS_ERROR("%s", error_.c_str());
     }
+}
+
+void
+Movement::MoveRobot()
+{
+  if (movement_ == 1)
+  {
+      get_dist_angle_tf();
+  }
+
+  if (movement_ != 0)
+  {
+    double control_pan = pan_pid_.get_output(angle_);
+    double control_tilt = tilt_pid_.get_output(dist_);
+
+    ROS_INFO("base_footprint -> object [%lf, %lf] dist = %lf angle = %lf control_pan = %lf control_tilt = %lf ago",
+      bf2object_.getOrigin().x(),
+      bf2object_.getOrigin().y(),
+      dist_,
+      angle_, 
+      control_pan,
+      control_tilt,
+      (ros::Time::now() - bf2object_.stamp_).toSec());
+
+    geometry_msgs::Twist vel_msgs;
+    vel_msgs.linear.x = dist_ - control_tilt -1.0;
+    vel_msgs.angular.z = angle_ - control_pan;
+    vel_pub_.publish(vel_msgs);
+  }
 }
 
 }  // namespace visual_behaviour

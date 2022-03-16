@@ -41,15 +41,13 @@ int main(int argc, char **argv)
   auto blackboard = BT::Blackboard::create();
   blackboard->set("object", "Prueba");
 
-  std::string pkgpath = ros::package::getPath("visual_behavior");
+  std::string pkgpath = ros::package::getPath("visual_behaviour");
   std::string xml_file = pkgpath + "/behavior_trees_xml/follow_one_object.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);
-
-  int count = 0;
 
   bool finish = false;
   while (ros::ok() && !finish)

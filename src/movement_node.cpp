@@ -20,7 +20,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "movement");
 
   visual_behaviour::Movement movement;
-
+  
   ros::Rate loop_rate(20);
   while (ros::ok())
   {

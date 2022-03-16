@@ -49,6 +49,8 @@ private:
 
     double dist_;
     double angle_;
+
+    br2_tracking::PIDController pan_pid_, tilt_pid_;
 };
     
 }  // namespace visual_behaviour

@@ -29,6 +29,8 @@ namespace visual_behaviour
 {
 
 Movement::Movement()
+: pan_pid_(0.0, 1.0, 0.0, 0.3),
+  tilt_pid_(-1.0, 1.0, 0.0, 0.1)
 {
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
 }
@@ -48,16 +50,21 @@ Movement::MoveRobot()
       dist_ = bf2object_.getOrigin().length();
       angle_ = atan2(bf2object_.getOrigin().y(),bf2object_.getOrigin().x());
 
-      ROS_INFO("base_footprint -> object [%lf, %lf] dist = %lf angle = %lf ago",
+      double control_pan = pan_pid_.get_output(angle_);
+      double control_tilt = tilt_pid_.get_output(dist_);
+
+      ROS_INFO("base_footprint -> object [%lf, %lf] dist = %lf angle = %lf control_pan = %lf control_tilt = %lf ago",
         bf2object_.getOrigin().x(),
         bf2object_.getOrigin().y(),
         dist_,
         angle_, 
+        control_pan,
+        control_tilt,
         (ros::Time::now() - bf2object_.stamp_).toSec());
 
       geometry_msgs::Twist vel_msgs;
-      vel_msgs.linear.x = dist_ -1.0;
-      vel_msgs.angular.z = angle_;
+      vel_msgs.linear.x = dist_ - control_tilt -1.0;
+      vel_msgs.angular.z = angle_ - control_pan;
       vel_pub_.publish(vel_msgs);
     }
     else

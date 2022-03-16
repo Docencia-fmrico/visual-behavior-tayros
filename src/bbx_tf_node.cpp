@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #include <ros/ros.h>
-#include <darknet_ros>
+#include "human_perception/BBXToTf.h"
 
-class PersonDetector
+int main(int argc, char** argv)
 {
-  ros::NodeHandle nh_;
-
-public:
-  PersonDetector(): it_(nh_)
-  {
-
-
-
-  }
+  ros::init(argc, argv, "bbx_tf");
+  human_perception::BBXToTf bbxtf;
+  ros::spin();
+  return 0;
+}

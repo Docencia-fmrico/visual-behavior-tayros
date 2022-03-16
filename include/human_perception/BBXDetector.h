@@ -31,7 +31,6 @@ class BBXDetector
 public:
   BBXDetector();
   void callback_bbx(const sensor_msgs::ImageConstPtr& image, const darknet_ros_msgs::BoundingBoxesConstPtr& boxes);
-  void publish_position();
 
 private:
   ros::NodeHandle nh;
@@ -44,6 +43,7 @@ private:
   message_filters::Subscriber<darknet_ros_msgs::BoundingBoxes> bbx_sub;
   message_filters::Synchronizer<MySyncPolicy_bbx> sync_bbx;
 
+  const float CAMERA_XCENTER = 340;
 
   std::string detectedObject_;
   std::string TopicID;

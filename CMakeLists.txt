@@ -65,6 +65,7 @@ add_library(${PROJECT_NAME}
   src/ball_perception/RGBDFilter.cpp
   src/ball_perception/RGBDtf.cpp
   src/human_perception/BBXDetector.cpp
+  src/human_perception/BBXToTf.cpp
 )
 
 add_executable(color_filter_node src/color_filter_node.cpp)
@@ -79,20 +80,28 @@ target_link_libraries(rgbd_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 add_executable(bbx_detector_node src/bbx_detector_node.cpp)
 target_link_libraries(bbx_detector_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
+add_executable(bbx_tf_node src/bbx_tf_node.cpp)
+target_link_libraries(bbx_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
 
 roslint_cpp(
   src/color_filter_node.cpp
   src/rgbd_filter_node.cpp
   src/rgbd_tf_node.cpp
   src/bbx_detector_node.cpp
+  src/bbx_tf_node.cpp
 
   src/ball_perception/ColorFilter.cpp
   src/ball_perception/RGBDFilter.cpp
   src/ball_perception/RGBDtf.cpp
+  src/human_perception/BBXDetector.cpp
+  src/human_perception/BBXToTf.cpp
 
   include/ball_perception/ColorFilter.h
   include/ball_perception/RGBDFilter.h
   include/ball_perception/RGBDtf.h
+  include/human_perception/BBXDetector.h
+  include/human_perception/BBXToTf.h
 )
 
 

@@ -25,16 +25,6 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "bbx");
   human_perception::BBXDetector bbx;
-
-  ros::Rate loop_rate(20);
-  while (ros::ok())
-  {
-    bbx.publish_position();
-
-    ros::spinOnce();
-    loop_rate.sleep();
-  }
-  bbx.publish_position();
-
+  ros::spin();
   return 0;
 }

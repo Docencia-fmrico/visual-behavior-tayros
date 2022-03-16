@@ -1,12 +1,27 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(visual_behavior)
+project(visual_behaviour)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
+set(CMAKE_CXX_FLAGS "-std=c++17")
+
+
+find_package(ZMQ)
+if(ZMQ_FOUND)
+    message(STATUS "ZeroMQ found.")
+    add_definitions(-DZMQ_FOUND)
+else()
+  message(WARNING "ZeroMQ NOT found. Not including PublisherZMQ.")
+endif()
 
 find_package(catkin REQUIRED COMPONENTS
+  geometry_msgs
+  tf2_geometry_msgs
   roscpp
-  std_msgs
+  tf2
+  tf2_ros
   roslint
+  std_msgs
   kobuki_msgs
   sensor_msgs
   tf
@@ -32,18 +47,26 @@ generate_messages(
 )
 
 catkin_package(
-CATKIN_DEPENDS 
+  CATKIN_DEPENDS 
+  INCLUDE_DIRS include
+  LIBRARIES
+  visual_behaviour
+  geometry_msgs
+  tf2_geometry_msgs
   roscpp 
   std_msgs 
   kobuki_msgs 
   sensor_msgs 
-  sensor_msgs
+  roslint
   tf
+  tf2
+  tf2_ros
   cv_bridge
   image_transport
   pcl_conversions
   pcl_ros
   message_runtime
+  behaviortree_cpp_v3
 )
 
 
@@ -51,6 +74,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
+  ${ZMQ_INCLUDE_DIRS}
 )
 
 link_directories(
@@ -66,7 +90,14 @@ add_library(${PROJECT_NAME}
   src/ball_perception/RGBDtf.cpp
   src/human_perception/BBXDetector.cpp
   src/human_perception/BBXToTf.cpp
-)
+  src/visual_behaviour/Movement.cpp
+  src/visual_behaviour/PIDController.cpp
+  src/visual_behaviour/transforms.cpp)
+
+add_library(approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)
+add_library(calculate_distance_bt_node SHARED src/behavior_tree_nodes/CalculateDistance.cpp)
+add_library(detect_object_bt_node SHARED src/behavior_tree_nodes/DetectObject.cpp )
+add_library(turn_bt_node SHARED src/behavior_tree_nodes/Turn.cpp)
 
 add_executable(color_filter_node src/color_filter_node.cpp)
 target_link_libraries(color_filter_node ${PROJECT_NAME} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
@@ -82,6 +113,29 @@ target_link_libraries(bbx_detector_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 add_executable(bbx_tf_node src/bbx_tf_node.cpp)
 target_link_libraries(bbx_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
+
+add_executable(movement_node src/movement_node.cpp)
+add_executable(follow_1object src/follow_1object.cpp)
+add_executable(follow_2objects src/follow_2objects.cpp)
+
+target_link_libraries(movement_node ${LINK_LIBS})
+target_link_libraries(follow_1object ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+target_link_libraries(follow_2objects ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
+
+
+list(APPEND plugin_libs
+  approach_object_bt_node
+  calculate_distance_bt_node
+  detect_object_bt_node
+  turn_bt_node
+)
+
+foreach(bt_plugin ${plugin_libs})
+  target_link_libraries(${bt_plugin} ${catkin_LIBRARIES})
+  target_compile_definitions(${bt_plugin} PRIVATE BT_PLUGIN_EXPORT)
+endforeach()
+
+
 
 
 roslint_cpp(
@@ -102,12 +156,14 @@ roslint_cpp(
   include/ball_perception/RGBDtf.h
   include/human_perception/BBXDetector.h
   include/human_perception/BBXToTf.h
+  
+  src/visual_behaviour/transforms.cpp include/visual_behaviour/transforms.h
+  src/movement_node.cpp
+  src/follow_1object.cpp
+  src/follow_2objects.cpp
+
+set(LINK_LIBS
+  visual_behaviour
+  ${catkin_LIBRARIES}
+
 )
-
-
-# catkin_add_gtest(Nombretest tests/Nombretest.cpp)
-# add_dependencies(Nombretest ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-# if(TARGET Nombretest)
-#    target_link_libraries(Nombretest ${catkin_LIBRARIES} ${PROJECT_NAME})
-#  endif()
-

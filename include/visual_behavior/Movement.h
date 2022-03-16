@@ -23,12 +23,13 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "geometry_msgs/Twist.h"
 #include "tf2/convert.h"
-#include "visual_behaviour/transforms.h"
+#include "visual_behavior/transforms.h"
 #include "ros/ros.h"
-#include "visual_behaviour/PIDController.h"
+#include "visual_behavior/PIDController.h"
 #include "std_msgs/Int32.h"
+#include "visual_behavior/position.h"
 
-namespace visual_behaviour
+namespace visual_behavior
 {
 
 class Movement
@@ -44,7 +45,10 @@ private:
 
     ros::Publisher vel_pub_;
     ros::Subscriber mov_sub_;
+    ros::Subscriber person_sub_;
+
     void callback(const std_msgs::Int32::ConstPtr& msg);
+    void personCallback(const visual_behavior::position::ConstPtr& position_in);
     void get_dist_angle_tf();
 
     geometry_msgs::TransformStamped bf2object_msg_;
@@ -58,6 +62,6 @@ private:
     br2_tracking::PIDController pan_pid_, tilt_pid_;
 };
     
-}  // namespace visual_behaviour
+}  // namespace visual_behavior
 
 #endif // VISUAL_BEHAVIOUR_MOVEMENT_H

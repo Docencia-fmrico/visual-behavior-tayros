@@ -20,21 +20,24 @@
 #include "tf2_geometry_msgs/tf2_geometry_msgs.h"
 #include "geometry_msgs/Twist.h"
 #include "tf2/convert.h"
-#include "visual_behaviour/transforms.h"
-#include "ros/ros.h"
-#include "visual_behaviour/PIDController.h"
-#include "visual_behaviour/Movement.h"
+#include "visual_behavior/transforms.h"
+#include <ros/ros.h>
+#include "visual_behavior/PIDController.h"
+#include "visual_behavior/Movement.h"
 #include "std_msgs/Int32.h"
+#include "visual_behavior/position.h"
 
-namespace visual_behaviour
+namespace visual_behavior
 {
 
 Movement::Movement()
 : pan_pid_(0.0, 1.0, 0.0, 0.3),
-  tilt_pid_(-1.0, 1.0, 0.0, 0.1)
+  tilt_pid_(0.0, 1.0, 0.0, 0.1)
 {
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
   mov_sub_ = n.subscribe<std_msgs::Int32>("/visual_behavior/move_tf", 1, &Movement::callback, this);
+  person_sub_ = n.subscribe<visual_behavior::position>("/visual_behavior/person/position", 1, &Movement::personCallback, this);
+  movement_ = 2;
 }
 
 void
@@ -64,6 +67,19 @@ Movement::get_dist_angle_tf()
 }
 
 void
+Movement::personCallback(const visual_behavior::position::ConstPtr& position_in)
+{
+  if(movement_ == 2){
+    dist_ = position_in->distance;
+    if(isnan(dist_)){
+      dist_ = 1;
+    }
+    angle_ = position_in->angle;
+    ROS_INFO("PERSON DETECTED!");
+  }
+}
+
+void
 Movement::MoveRobot()
 {
   if (movement_ == 1)
@@ -76,20 +92,11 @@ Movement::MoveRobot()
     double control_pan = pan_pid_.get_output(angle_);
     double control_tilt = tilt_pid_.get_output(dist_);
 
-    ROS_INFO("base_footprint -> object [%lf, %lf] dist = %lf angle = %lf control_pan = %lf control_tilt = %lf ago",
-      bf2object_.getOrigin().x(),
-      bf2object_.getOrigin().y(),
-      dist_,
-      angle_, 
-      control_pan,
-      control_tilt,
-      (ros::Time::now() - bf2object_.stamp_).toSec());
-
     geometry_msgs::Twist vel_msgs;
-    vel_msgs.linear.x = dist_ - control_tilt -1.0;
+    vel_msgs.linear.x = (dist_ - 1.0) * 0.1;
     vel_msgs.angular.z = angle_ - control_pan;
     vel_pub_.publish(vel_msgs);
   }
 }
 
-}  // namespace visual_behaviour
+}  // namespace visual_behavior

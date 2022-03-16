@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "visual_behaviour/Movement.h"
-#include "ros/ros.h"
+#include "visual_behavior/Movement.h"
+#include <ros/ros.h>
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "movement");
 
-  visual_behaviour::Movement movement;
+  visual_behavior::Movement movement;
   
   ros::Rate loop_rate(20);
   while (ros::ok())

@@ -17,6 +17,7 @@
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
+#include "std_msgs/Int32.h"
 
 #include <string>
 
@@ -42,9 +43,9 @@ class ApproachObject : public BT::ActionNodeBase
 
   private:
     ros::NodeHandle nh_;
-    ros::Publisher vel_pub_;
+    ros::Publisher mov_pub_;
+    std_msgs::Int32 move_;
 
-    int counter_;
 };
 
 }  // namespace behavior_trees

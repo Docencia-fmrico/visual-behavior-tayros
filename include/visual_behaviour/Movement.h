@@ -26,6 +26,7 @@
 #include "visual_behaviour/transforms.h"
 #include "ros/ros.h"
 #include "visual_behaviour/PIDController.h"
+#include "std_msgs/Int32.h"
 
 namespace visual_behaviour
 {
@@ -42,6 +43,9 @@ public:
 private:
 
     ros::Publisher vel_pub_;
+    ros::Subscriber mov_sub_;
+    void callback(const std_msgs::Int32::ConstPtr& msg);
+    void get_dist_angle_tf();
 
     geometry_msgs::TransformStamped bf2object_msg_;
     tf2::Stamped<tf2::Transform> bf2object_;
@@ -49,6 +53,7 @@ private:
 
     double dist_;
     double angle_;
+    int movement_;
 
     br2_tracking::PIDController pan_pid_, tilt_pid_;
 };

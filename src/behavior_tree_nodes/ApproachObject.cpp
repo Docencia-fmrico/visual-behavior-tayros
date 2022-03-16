@@ -19,51 +19,34 @@
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 
-#include "geometry_msgs/Twist.h"
+#include "std_msgs/Int32.h"
 #include "ros/ros.h"
 
 namespace behavior_trees
 {
 
 ApproachObject::ApproachObject(const std::string& name, const BT::NodeConfiguration & config)
-: BT::ActionNodeBase(name, config), counter_(0)
+: BT::ActionNodeBase(name, config)
 {
-  std::string sub_movement_topic =  nh_.param("movement_topic", std::string("/mobile_base/commands/velocity"));
-  vel_pub_ = nh_.advertise<geometry_msgs::Twist>(sub_movement_topic, 1);
+  std::string sub_movement_topic =  nh_.param("movement_topic", std::string("/visual_behavior/move_tf"));
+  mov_pub_ = nh_.advertise<std_msgs::Int32>(sub_movement_topic, 1);
 }
 
 void
 ApproachObject::halt()
 {
-  ROS_INFO("ApproachObject halt");
+  move_.data = 0;
+  mov_pub_.publish(move_);
 }
 
 BT::NodeStatus
 ApproachObject::tick()
 {
-  if (status() == BT::NodeStatus::IDLE)
-  {
-    ROS_INFO("First time in ApproachObject");
-  }
+  move_.data = 1;
+  mov_pub_.publish(move_);
 
-  std::string object = getInput<std::string>("object").value();
-  ROS_INFO("ApproachObject [%s] tick %d", object.c_str(), counter_);
+  return BT::NodeStatus::RUNNING;
 
-  if (counter_++ < 300)
-  {
-    geometry_msgs::Twist msg;
-    msg.linear.x = 0.4;
-
-    vel_pub_.publish(msg);
-    return BT::NodeStatus::RUNNING;
-  }
-  else
-  {
-    geometry_msgs::Twist msg;
-    vel_pub_.publish(msg);
-
-    return BT::NodeStatus::SUCCESS;
-  }
 }
 
 }  // namespace behavior_trees

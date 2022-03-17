@@ -15,7 +15,7 @@
 #include "tf2/transform_datatypes.h"
 #include "tf2/LinearMath/Transform.h"
 
-#include "visual_behaviour/transforms.h"
+#include "visual_behavior/transforms.h"
 
 namespace geometry_tf
 {

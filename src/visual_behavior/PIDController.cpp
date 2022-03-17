@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include <algorithm>
-#include "visual_behaviour/PIDController.h"
+#include "visual_behavior/PIDController.h"
 
 namespace br2_tracking
 {

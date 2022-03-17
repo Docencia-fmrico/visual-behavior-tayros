@@ -52,6 +52,34 @@ The perception behaviour splits in two main behaviours: __human perception__ and
 
 The ball perception has been made using __HSV color filtering in OpenCV__ and also using __TFs__.
 
+-----------------------------------------------------------------------
+Snippet(cloudCB):
+``` cpp
+      ...
+      x = x/c;
+      y = y/c;
+      z = z/c;
+
+
+      tf::StampedTransform transform;
+      transform.setOrigin(tf::Vector3(x, y, z));
+      transform.setRotation(tf::Quaternion(0.0, 0.0, 0.0, 1.0));
+
+      transform.stamp_ = ros::Time::now();
+      transform.frame_id_ = workingFrameId_;
+      transform.child_frame_id_ = objectFrameId_;
+
+      try
+      {
+        tfBroadcaster_.sendTransform(transform);
+      }
+      catch(tf::TransformException& ex)
+      {
+        ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting         callback");
+        return;
+```
+-----------------------------------------------------------------------
+
 ### Human Perception
 
 Human perception has been made been using Bounding Boxes from Darknet ROS library.

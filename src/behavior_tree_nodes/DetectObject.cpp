@@ -23,7 +23,7 @@ namespace behavior_trees
 {
 
 DetectObject::DetectObject(const std::string& name,  const BT::NodeConfiguration & config)
-: BT::ActionNodeBase(name, {}), counter_(0)
+: BT::ActionNodeBase(name, config)
 {
 }
 
@@ -36,6 +36,7 @@ DetectObject::halt()
 BT::NodeStatus
 DetectObject::tick()
 {
+  setOutput<std::string>("object", "Ball");
   ROS_INFO("DetectObject tick");
 
   return BT::NodeStatus::SUCCESS;

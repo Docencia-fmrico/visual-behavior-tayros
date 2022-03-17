@@ -38,7 +38,7 @@ class ApproachObject : public BT::ActionNodeBase
 
     static BT::PortsList providedPorts()
     {
-        return { BT::InputPort<std::string>("object")};
+        return { BT::InputPort<std::string>("target")};
     }
 
   private:

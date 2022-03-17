@@ -39,12 +39,11 @@ int main(int argc, char **argv)
   factory.registerFromPlugin(loader.getOSName("turn_bt_node"));
 
   auto blackboard = BT::Blackboard::create();
-  blackboard->set("object", "Prueba");
 
   std::string pkgpath = ros::package::getPath("visual_behaviour");
   std::string xml_file = pkgpath + "/behavior_trees_xml/follow_one_object.xml";
 
-  BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
+  BT::Tree tree = factory.createTreeFromFile(xml_file);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);
 
   ros::Rate loop_rate(10);

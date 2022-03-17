@@ -38,7 +38,7 @@ class DetectObject : public BT::ActionNodeBase
 
     static BT::PortsList providedPorts()
     {
-        return { BT::InputPort<std::string>("object")};
+        return { BT::OutputPort<std::string>("object")};
     }
 
   private:

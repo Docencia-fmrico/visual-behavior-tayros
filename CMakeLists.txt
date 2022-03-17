@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(visual_behaviour)
+project(visual_behavior)
 
 set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/cmake")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
@@ -51,7 +51,7 @@ catkin_package(
   CATKIN_DEPENDS 
   INCLUDE_DIRS include
   LIBRARIES
-  visual_behaviour
+  visual_behavior
   geometry_msgs
   tf2_geometry_msgs
   roscpp 
@@ -158,14 +158,14 @@ roslint_cpp(
   include/human_perception/BBXDetector.h
   include/human_perception/BBXToTf.h
   
-  src/visual_behavior/transforms.cpp include/visual_behaviour/transforms.h
+  src/visual_behavior/transforms.cpp include/visual_behavior/transforms.h
   src/movement_node.cpp
   src/follow_1object.cpp
   src/follow_2objects.cpp
 )
 
 set(LINK_LIBS
-  visual_behaviour
+  visual_behavior
   ${catkin_LIBRARIES}
 
 )

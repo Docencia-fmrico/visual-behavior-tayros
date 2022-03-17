@@ -46,68 +46,107 @@ In the following image you can see the Behaviour Tree made in __Groot__:
 
 ## Perception
 
-FinalBumpGo inherits from the SensorGo base class and implements a sensorCallback function that allows it to communicate with the kobuki bumpers to take the state and indicate it to the state machine. 
+The perception behaviour splits in two main behaviours: __human perception__ and __ball perception__:
 
-If it detects that the left bumper has been activated, it will indicate a right turn and if the right or central bumper is activated, it will turn left. 
+### Ball Perception
+
+The ball perception has been made using __HSV color filtering in OpenCV__ and also using __TFs__.
+
+### Human Perception
+
+Human perception has been made been using Bounding Boxes from Darknet ROS library.
+
+Once the camera detects a Human, we can take plenty of usefull information like distance, angle, frame_id or time stamp.
 
 -----------------------------------------------------------------------
-Snippet(sensorCallback):
+Snippet(callback_bbx):
 ``` cpp
-void
-FinalBumpGo::sensorCallback(const kobuki_msgs::BumperEvent::ConstPtr& msg)
-{
-  pressed_ = msg->state;
-  bumper_ = msg->bumper;
+if(box.Class == "person"){
+      std::cerr << box.Class << " at (" << "Dist: "<< dist << " Ang: " <<ang << std::endl;
+      person_pos.angle = ang;
+      person_pos.distance = dist;
+      person_pos.detected_object = "person";
+      person_pos.header.frame_id = workingFrameId_;
+      person_pos.header.stamp = ros::Time::now();
+      position_pub.publish(person_pos);
+    }
+```
+-----------------------------------------------------------------------
 
-  if (bumper_ == LEFT)
+We publish this information in order to change from Bounding Boxes to TFs:
+
+-----------------------------------------------------------------------
+Snippet(positionCallback):
+``` cpp
+result_tf.setOrigin(tf::Vector3(0, 0,0));
+    result_tf.setRotation(q);
+    result_tf.stamp_ = ros::Time::now();
+    result_tf.frame_id_ = workingFrameId_;
+    result_tf.child_frame_id_ = objectFrameId_;
+
+    try
+    {
+        tfBroadcaster_.sendTransform(result_tf);
+    }
+    catch(tf::TransformException& ex)
+    {
+        ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting callback");
+        return;
+    }
+```
+-----------------------------------------------------------------------
+
+The TF Broadcaster allow us to listen the TFs to make the movement behaviour.
+
+## Movement
+
+In this section you will find how movement behaviour works.
+
+The __movement node__ creates a movement object and in each loop of the while(ros::ok()) calls to MoveRobot(). This function manage a little logical behaviour based in the following points:
+
+-----------------------------------------------------------------------
+Snippet(MoveRobot):
+``` cpp
+{
+  if (movement_ == 1)
   {
-    turn_direction_ = TURN_RIGHT;
+      get_dist_angle_tf();
   }
 
-  // If bumper detects left or center, the robot turn left
-  else
+  if (movement_ != 0)
   {
-    turn_direction_ = TURN_LEFT;
+    double control_pan = pan_pid_.get_output(angle_);
+    double control_tilt = tilt_pid_.get_output(dist_);
+
+    geometry_msgs::Twist vel_msgs;
+    vel_msgs.linear.x = (dist_ - 1.0) * 0.1;
+    vel_msgs.angular.z = angle_ - control_pan;
+    vel_pub_.publish(vel_msgs);
   }
 }
 ```
 -----------------------------------------------------------------------
 
-## Movement
-
-lidarBumpGo inherits too from the SensorGo base class. In the sensorCallback function, it calls a function that returns the nearest distance the sensor is taking.
-
-Then, if the distance is less than the value *MIN_DISTANCE_* it changes the attribute *pressed_*, before that, the program decide if turn left or turn right depending the side of the nearest distance.
-
-In the program the range is 60; (60 * 0.008) = 0.48 rad. In the tests of the real robot was the best value. 
+The following TF Listener made in get_dist_angle_tf() function "listens" to the TFs published before by the TF Broadcaster:
 
 -----------------------------------------------------------------------
 Snippet(sensorCallback):
 ``` cpp
-void
-lidarBumpGo::sensorCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
-{
-  float nearest_distance = obtainDistance(msg);
+tf2_ros::Buffer buffer;
+  tf2_ros::TransformListener listener(buffer);
+  if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
+ {
+    bf2object_msg_ = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
 
-  if (nearest_distance <= MIN_DISTANCE_)
-  {
-    pressed_ = true;
-  }
-  else
-  {
-    pressed_ = false;
-  }
+    tf2::fromMsg(bf2object_msg_, bf2object_);
 
-  if (nearest_position_ == LEFT)
-  {
-    turn_direction_ = TURN_RIGHT;
-  }
-
-  // If bumper detects left or center, the robot turn left
-  if (nearest_position_ == RIGHT)
-  {
-    turn_direction_ = TURN_LEFT;
-  }
+    dist_ = bf2object_.getOrigin().length();
+    angle_ = atan2(bf2object_.getOrigin().y(),bf2object_.getOrigin().x());
+    }
+    else
+    {
+      ROS_ERROR("%s", error_.c_str());
+    }
 }
 ```
 -----------------------------------------------------------------------

@@ -1,0 +1,25 @@
+<root main_tree_to_execute="FirsrBehaviorTree">
+
+    <BehaviorTree ID="FirsrBehaviorTree">
+        <KeepRunningUntilFailure>
+            <ForceSuccess>
+                <ReactiveSequence>
+
+                    <!-- Searchs the object -->
+                    <RetryUntilSuccesful num_attempts="100">
+                        <Fallback>
+                            <DetectBall name="detect_ball" object="{toFollow}"/>
+                            <Inverter>
+                                <Turn name="Turn"/>
+                            </Inverter>
+                        </Fallback>
+                    </RetryUntilSuccesful>
+
+                    <ApproachObject name="approach" target="{toFollow}"/>
+
+                </ReactiveSequence>
+            </ForceSuccess>
+        </KeepRunningUntilFailure>
+    </BehaviorTree>
+
+</root>

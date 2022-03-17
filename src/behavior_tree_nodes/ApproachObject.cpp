@@ -22,6 +22,13 @@
 #include "std_msgs/Int32.h"
 #include "ros/ros.h"
 
+enum
+{
+  STOP = 0,
+  BALL = 1,
+  HUMAN = 2,
+};
+
 namespace behavior_trees
 {
 
@@ -35,7 +42,7 @@ ApproachObject::ApproachObject(const std::string& name, const BT::NodeConfigurat
 void
 ApproachObject::halt()
 {
-  move_.data = 0;
+  move_.data = STOP;
   mov_pub_.publish(move_);
 }
 
@@ -43,8 +50,19 @@ BT::NodeStatus
 ApproachObject::tick()
 {
   std::string Target = getInput<std::string>("target").value();
-  printf("%s\n", Target.c_str());
-  move_.data = 1;
+  if (Target == "Ball")
+  {
+    move_.data = BALL;
+  }
+  if (Target == "Human")
+  {
+    move_.data = HUMAN;
+  }
+  if (Target == "Nothing")
+  {
+    move_.data = STOP;
+  }
+  
   mov_pub_.publish(move_);
 
   return BT::NodeStatus::RUNNING;

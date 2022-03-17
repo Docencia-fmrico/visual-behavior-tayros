@@ -14,49 +14,58 @@
 // limitations under the License.
 
 #include <string>
-#include "behavior_trees/DetectObject.h"
+#include "behavior_trees/DetectBall.h"
 #include "behaviortree_cpp_v3/behavior_tree.h"
-#include "ros/ros.h"
 #include "visual_behavior/position.h"
-
+#include "tf2/transform_datatypes.h"
+#include "tf2_ros/transform_listener.h"
+#include "tf2/LinearMath/Transform.h"
+#include "geometry_msgs/TransformStamped.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "geometry_msgs/Twist.h"
+#include "tf2/convert.h"
+#include <ros/ros.h>
+#include "visual_behavior/PIDController.h"
+#include "visual_behavior/Movement.h"
+#include "std_msgs/Int32.h"
 
 namespace behavior_trees
 {
 
-DetectObject::DetectObject(const std::string& name,  const BT::NodeConfiguration & config)
+DetectBall::DetectBall(const std::string& name,  const BT::NodeConfiguration & config)
 : BT::ActionNodeBase(name, config)
 {
-  person_sub_ = nh_.subscribe<visual_behavior::position>("/visual_behavior/person/position", 1, &DetectObject::personCallback, this);
 }
 
 void
-DetectObject::personCallback(const visual_behavior::position::ConstPtr& position_in)
+DetectBall::halt()
 {
-  person_ = true;
-  ROS_INFO("Human detected");
-}
-
-void
-DetectObject::halt()
-{
-  person_ = false;
-  ROS_INFO("DetectObject halt");
+  ball_ = false;
 }
 
 BT::NodeStatus
-DetectObject::tick()
+DetectBall::tick()
 {
-  ROS_INFO("2 detected");
-  
-
-  if (person_)
+  tf2_ros::Buffer buffer;
+  tf2_ros::TransformListener listener(buffer);
+  if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
   {
-    setOutput<std::string>("object", "Human");
-    person_ = false;
+    ball_ = true;
+    }
+  else
+  {
+      ball_ = false;
+  }
+
+  if (ball_)
+  {
+    ROS_INFO("Ball detected");
+    setOutput<std::string>("object", "Ball");
     return BT::NodeStatus::SUCCESS;
   }
   else
   {
+     ROS_INFO("NO detected");
     setOutput<std::string>("object", "Nothing");
     return BT::NodeStatus::FAILURE;
   }
@@ -68,5 +77,5 @@ DetectObject::tick()
 #include "behaviortree_cpp_v3/bt_factory.h"
 BT_REGISTER_NODES(factory)
 {
-  factory.registerNodeType<behavior_trees::DetectObject>("DetectObject");
+  factory.registerNodeType<behavior_trees::DetectBall>("DetectBall");
 }

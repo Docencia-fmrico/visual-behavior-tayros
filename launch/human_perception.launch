@@ -1,0 +1,9 @@
+<launch>
+
+  <include file="$(find darknet_ros)/launch/darknet_ros.launch"/> 
+
+  <node 
+	pkg="visual_behavior" type="bbx_detector_node" name="PerceptionTopic" output="screen">
+  </node>
+
+</launch>

@@ -57,8 +57,7 @@ private:
 
   static const int MAX_CHANNELS = 3;
   HSVInfo hsvValues_[MAX_CHANNELS];
-
 };
-}
+}  //namespace ball_perception
 
 #endif  // BALL_PERCEPTION_COLORFILTER_H

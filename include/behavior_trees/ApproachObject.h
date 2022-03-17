@@ -35,7 +35,6 @@ class ApproachObject : public BT::ActionNodeBase
 
     BT::NodeStatus tick();
 
-
     static BT::PortsList providedPorts()
     {
         return { BT::InputPort<std::string>("target")};

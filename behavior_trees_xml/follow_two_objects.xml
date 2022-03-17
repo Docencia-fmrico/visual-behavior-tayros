@@ -6,14 +6,15 @@
             <!-- Searchs the object -->
             <RetryUntilSuccesful num_attempts="100">
                 <Fallback>
-                    <DetectObject name="detect_object" object="{object}"/>
+                    <DetectBall name="detect_ball" object="{toFollow}"/>
+                    <DetectObject name="detect_object" object="{toFollow}"/>
                     <Inverter>
                         <Turn name="Turn"/>
                     </Inverter>
                 </Fallback>
             </RetryUntilSuccesful>
 
-            <ApproachObject name="approach" object="{object}"/>
+            <ApproachObject name="approach" target="{toFollow}"/>
 
         </ReactiveSequence>
     </BehaviorTree>

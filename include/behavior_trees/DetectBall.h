@@ -13,33 +13,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BEHAVIOR_TREES_DETECTOBJECT_H
-#define BEHAVIOR_TREES_DETECTOBJECT_H
-
-#include "behaviortree_cpp_v3/behavior_tree.h"
-#include "behaviortree_cpp_v3/bt_factory.h"
-#include "visual_behavior/position.h"
+#ifndef BEHAVIOR_TREES_DETECTBALL_H
+#define BEHAVIOR_TREES_DETECTBALL_H
 
 #include <string>
-
-#include "ros/ros.h"
+#include "behavior_trees/DetectBall.h"
+#include "behaviortree_cpp_v3/behavior_tree.h"
+#include "visual_behavior/position.h"
+#include "tf2/transform_datatypes.h"
+#include "tf2_ros/transform_listener.h"
+#include "tf2/LinearMath/Transform.h"
+#include "geometry_msgs/TransformStamped.h"
+#include "tf2_geometry_msgs/tf2_geometry_msgs.h"
+#include "geometry_msgs/Twist.h"
+#include "tf2/convert.h"
+#include <ros/ros.h>
+#include "visual_behavior/PIDController.h"
+#include "visual_behavior/Movement.h"
+#include "std_msgs/Int32.h"
 
 namespace behavior_trees
 {
 
-class DetectObject : public BT::ActionNodeBase
+class DetectBall : public BT::ActionNodeBase
 {
   public:
-    explicit DetectObject(const std::string& name, const BT::NodeConfiguration& config);
+    explicit DetectBall(const std::string& name, const BT::NodeConfiguration& config);
 
     void halt();
 
     BT::NodeStatus tick();
-    void personCallback(const visual_behavior::position::ConstPtr& position_in);
-    ros::Subscriber person_sub_;
-    bool person_;
-
-    float last_detection_time;
+    bool ball_;
 
     static BT::PortsList providedPorts()
     {
@@ -48,11 +52,11 @@ class DetectObject : public BT::ActionNodeBase
 
   private:
     ros::NodeHandle nh_;
-    ros::Publisher vel_pub_;
-
-    int counter_;
+    geometry_msgs::TransformStamped bf2object_msg_;
+    tf2::Stamped<tf2::Transform> bf2object_;
+    std::string error_;
 };
 
 }  // namespace behavior_trees
 
-#endif  // BEHAVIOR_TREES_DETECTOBJECT_H
+#endif  // BEHAVIOR_TREES_DETECTBall_H

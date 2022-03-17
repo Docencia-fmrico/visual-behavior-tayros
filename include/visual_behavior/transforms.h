@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef GEOMETRY_TF_TRANSFORMS_H
-#define GEOMETRY_TF_TRANSFORMS_H
+#ifndef VISUAL_BEHAVIOR_TRANSFORMS_H
+#define VISUAL_BEHAVIOR_TRANSFORMS_H
 
 #include "tf2/transform_datatypes.h"
 #include "tf2/LinearMath/Transform.h"
@@ -24,4 +24,4 @@ namespace geometry_tf
 tf2::Vector3 transform_point(const tf2::Vector3 & input_point, const tf2::Transform & transform);
 
 }  // namespace geometry_tf
-#endif  // GEOMETRY_TF_TRANSFORMS_H
+#endif  // VISUAL_BEHAVIOR_TRANSFORMS_H

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BALL_PERCEPTION_RGBDTF_H
-#define BALL_PERCEPTION_RGBDTF_H
+#ifndef HUMAN_PERCEPTION_BBXDETECTOR_H
+#define HUMAN_PERCEPTION_BBXDETECTOR_H
 
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
@@ -22,6 +22,7 @@
 #include <sensor_msgs/Image.h>
 #include <darknet_ros_msgs/BoundingBoxes.h>
 #include "visual_behavior/position.h"
+#include <string>
 
 namespace human_perception
 {
@@ -38,7 +39,8 @@ private:
   visual_behavior::position person_pos;
   ros::Publisher position_pub;
 
-  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, darknet_ros_msgs::BoundingBoxes> MySyncPolicy_bbx;
+  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, 
+    darknet_ros_msgs::BoundingBoxes> MySyncPolicy_bbx;
   message_filters::Subscriber<sensor_msgs::Image> image_depth_sub;
   message_filters::Subscriber<darknet_ros_msgs::BoundingBoxes> bbx_sub;
   message_filters::Synchronizer<MySyncPolicy_bbx> sync_bbx;
@@ -49,6 +51,6 @@ private:
   std::string TopicID;
   std::string workingFrameId_;
 };
-}
+}  // namespace human_perception
 
-#endif  // BALL_PERCEPTION_RGBDTF_H
+#endif  // HUMAN_PERCEPTION_BBXDETECTOR_H

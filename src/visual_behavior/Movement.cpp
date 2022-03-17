@@ -31,7 +31,7 @@ namespace visual_behavior
 {
 
 Movement::Movement()
-: pan_pid_(0.0, 1.0, 0.0, 0.3),
+: pan_pid_(0.0, 1.0, 0.0, 0.15),
   tilt_pid_(0.0, 1.0, 0.0, 0.1)
 {
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
@@ -63,6 +63,7 @@ Movement::get_dist_angle_tf()
     else
     {
       ROS_ERROR("%s", error_.c_str());
+      dist_ = 1;
     }
 }
 
@@ -73,6 +74,9 @@ Movement::personCallback(const visual_behavior::position::ConstPtr& position_in)
     dist_ = position_in->distance;
     if(isnan(dist_)){
       dist_ = 1;
+    }
+    else if(dist_ > 5){
+      dist_ = 5;
     }
     angle_ = position_in->angle;
     ROS_INFO("PERSON DETECTED!");
@@ -94,8 +98,8 @@ Movement::MoveRobot()
     double control_tilt = tilt_pid_.get_output(dist_);
 
     geometry_msgs::Twist vel_msgs;
-    vel_msgs.linear.x = (dist_ - 1.0) * 0.1;
-    vel_msgs.angular.z = angle_ - control_pan;
+    vel_msgs.linear.x = (dist_ - 1.0) / 5;
+    vel_msgs.angular.z = angle_ - control_pan + 0.1;
     vel_pub_.publish(vel_msgs);
   }
 }

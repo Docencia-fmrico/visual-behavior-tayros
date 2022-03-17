@@ -33,6 +33,7 @@ void
 DetectObject::personCallback(const visual_behavior::position::ConstPtr& position_in)
 {
   person_ = true;
+  ROS_INFO("Human detected");
 }
 
 void
@@ -45,6 +46,7 @@ DetectObject::halt()
 BT::NodeStatus
 DetectObject::tick()
 {
+  ROS_INFO("2 detected");
   
 
   if (person_)

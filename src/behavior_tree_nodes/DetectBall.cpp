@@ -59,11 +59,13 @@ DetectBall::tick()
 
   if (ball_)
   {
+    ROS_INFO("Ball detected");
     setOutput<std::string>("object", "Ball");
     return BT::NodeStatus::SUCCESS;
   }
   else
   {
+     ROS_INFO("NO detected");
     setOutput<std::string>("object", "Nothing");
     return BT::NodeStatus::FAILURE;
   }

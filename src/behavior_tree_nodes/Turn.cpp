@@ -42,7 +42,7 @@ Turn::tick()
 {
   ROS_INFO("Girando");
   geometry_msgs::Twist vel_msgs;
-  vel_msgs.angular.z = 0.4;
+  vel_msgs.angular.z = 0.7;
   vel_pub_.publish(vel_msgs);
   return BT::NodeStatus::SUCCESS;
 }

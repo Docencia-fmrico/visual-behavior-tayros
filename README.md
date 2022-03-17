@@ -194,49 +194,51 @@ In the following image you can see the Behaviour Tree made in __Groot__:
 
 ### Follow Human
 
-The BT is always runnig, the base is a reactive sequence, under the sequence we have a fallback wich tries to detect the human, it writes in a port called toFollow "Human", if the node dosen't detect nothig the robots starts turning. Turn always returns SUCCESS. When one human is detected the reactive sequnce is calling in loop to detect object and approbachObject. ApprobachObject always is reading the port toFollow and creates a topic with a int to indicate what's the object detect_object is detecting (An human)
-
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/followHuman.png?raw=true" alt="explode"></a>
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowHuman.png?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
 
 The first objective was to make the robot follow a human using Bounding Boxes from __DarknetROS__
 
+The BT is always running, the base is a reactive sequence, under the sequence we have a fallback wich tries to detect the human, it writes in a port called toFollow "Human", if the node doesn't detect nothig the robots starts turning. Turn always returns SUCCESS. When one human is detected the reactive sequnce is calling in loop to detect object and approbachObject. ApprobachObject always is reading the port toFollow and creates a topic with a int to indicate what's the object detect_object is detecting (An human)
+
 You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EfThSuSHDLZBiZ6kEb4ogJ0Bm4t4KhwBVoKoPJDNyGEI_Q?e=aUXScF)
 
 ### Follow Ball
 
-This BT is the same that the previous one. The difference is that this BT detects a Ball, so DetectBall writes Ball in the port toFollow
+
 
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/detectBall.png?raw=true" alt="explode"></a>
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowBall.png?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
 
 Another objective of this project was to make the robot able to follow a ball using __TFs__ and __color filtering__.
 
+This BT is the same that the previous one. The difference is that this BT detects a Ball, so DetectBall writes Ball in the port toFollow.
+
 You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/ESpUkj2sZzxAj7NWjWMu_iUB9z5rCxZEkpkqZmBAzyWIUA?e=uqVJLe)
 
 ### Human & Ball
 
-In this BT we add the node DetectBall and DetectHuman in the Fallback, if we dont find the ball we search the human, else the robots start turning searching one of both. The one that finds his objective writes in the same port toFollow. ApprobachObject reads the port and publish the following object.
-
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/followTwoObjects.png?raw=true" alt="explode"></a>
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTFollowBoth.png?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
 
 The last objective was to make the robot able to follow both ball and human, but giving preference to the ball.
+
+In this BT we added the node DetectBall and DetectHuman in the Fallback, if we dont find the ball we search the human, else the robots start turning searching one of both. The one that finds his objective writes in the same port toFollow. ApprobachObject reads the port and publish the following object.
 
 You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EVsVHefVfa5KqGEOiqivIgIBhYkk-oGhJcOQpwDXBEjMWg?e=eNcInM)
 

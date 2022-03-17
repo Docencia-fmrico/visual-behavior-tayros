@@ -5,11 +5,12 @@
 <img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/xtion.jpg?raw=true" alt="explode"></a>
 </div>
 
-<h3 align="center"> Astra Camera </h3>
+<h3 align="center"> Viusal Behavior </h3>
 
 <div align="center">
 <img width=100px src="https://img.shields.io/badge/status-finished-brightgreen" alt="explode"></a>
 <img width=100px src="https://img.shields.io/badge/license-Apache-orange" alt="explode"></a>
+<img width=90px src="https://img.shields.io/badge/team-TayRos-yellow" alt="explode"></a>
 </div>
 
 
@@ -25,11 +26,15 @@
 
 ## Perception
 
-The perception behaviour splits in two main behaviours: __human perception__ and __ball perception__:
+The perception of this practice is divided into two libraries: __human perception__ and __ball perception__:
+
+Both designed with the idea of maintaining a modular form and allowing an easy extension of these, like all parts of the project.
 
 ### Ball Perception
 
-The ball perception has been made using __HSV color filtering in OpenCV__ and also using __TFs__.
+For the perception of the ball, a **HSV color filter** has been used, which is transformed into a **point cloud** in order to obtain the 3D point and thus convert the detected object into a **tf**. To achieve this we have relied on the **OpenCV** library.
+
+To store the filter values so that they can be easily modified we have created a configuration file (**color_filter.yaml**). 
 
 -----------------------------------------------------------------------
 Snippet(cloudCB):
@@ -61,9 +66,25 @@ Snippet(cloudCB):
 
 ### Human Perception
 
-Human perception has been made been using Bounding Boxes from Darknet ROS library.
+Human perception has been made been using **Bounding Boxes** from **Darknet ROS library**.
 
-Once the camera detects a Human, we can take plenty of usefull information like distance, angle, frame_id or time stamp.
+We have also **modified certain parameters of the Darket Ros** library to improve performance and accuracy. We limit the detection to only when its probability exceeds 0.6 and only detecting people. If we want to detect more objects we should only add these to **yolov2-tiny.yaml**.
+
+To communicate this node with the movement and behavior tree we have created a **custom message(position.msg)** which allows us to publish the **distance** to the object detected with darknet together with the **angle error** between our robot and it (scale: -1 , 1).
+
+It also adds a **string indicating the type of object** (future implementations) and a **std_msgs header** to store extra information such as the time stamp.
+
+Position.msg:
+-----------------------------------------------------------------------
+``` cpp
+std_msgs/Header header
+
+string detected_object
+float64  angle
+float64  distance
+```
+-----------------------------------------------------------------------
+
 
 -----------------------------------------------------------------------
 Snippet(callback_bbx):
@@ -79,31 +100,6 @@ if(box.Class == "person"){
     }
 ```
 -----------------------------------------------------------------------
-
-We publish this information in order to change from Bounding Boxes to TFs:
-
------------------------------------------------------------------------
-Snippet(positionCallback):
-``` cpp
-result_tf.setOrigin(tf::Vector3(0, 0,0));
-    result_tf.setRotation(q);
-    result_tf.stamp_ = ros::Time::now();
-    result_tf.frame_id_ = workingFrameId_;
-    result_tf.child_frame_id_ = objectFrameId_;
-
-    try
-    {
-        tfBroadcaster_.sendTransform(result_tf);
-    }
-    catch(tf::TransformException& ex)
-    {
-        ROS_ERROR_STREAM("Transform error of sensor data: " << ex.what() << ", quitting callback");
-        return;
-    }
-```
------------------------------------------------------------------------
-
-The TF Broadcaster allow us to listen the TFs to make the movement behaviour.
 
 ## Movement
 
@@ -278,22 +274,20 @@ turning_vel: 0.5
 ### .launch
 
 -----------------------------------------------------------------------
-Snippet(perception launch):
+Snippet(follow_person_and_ball.launch):
 ``` launch
-<launch>
+<launch>   
 
-	<node pkg="visual_behavior" type="color_filter_node" name="PerceptionFilter" output="screen">
-		<rosparam command="load" file="$(find visual_behavior)/config/color_filter.yaml"/>
-	</node>
+    <include file="$(find visual_behavior)/launch/human_perception.launch"/> 
+    <include file="$(find visual_behavior)/launch/ball_perception.launch"/> 
 
-	<node 
-		pkg="cameras_cpp" type="nodo_rgbd_filter" name="PerceptionCloud" output="screen">
-	</node>
+    <node 
+       pkg="visual_behavior" type="movement_node" name="Movement" output="screen">
+    </node>
 
-	<node 
-		pkg="visual_behavior" type="rgbd_tf_node" name="PerceptionTf" output="screen">
-	</node>
-
+    <node 
+	pkg="visual_behavior" type="follow_2objects" name="BTFinal" output="screen">
+    </node>
 
 </launch>
 ```

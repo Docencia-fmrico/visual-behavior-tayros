@@ -216,49 +216,53 @@ We used .yaml and .launch files:
 
 In the yamel we write the parameters we wont to use and the topic we want to publish/subscribe. 
 
------------------------------------------------------------------------
-Snippet(yaml example):
-``` yaml
-sub_sensor_path: /scan_filtered
+Here an example of the HSV color values stablished for the color filter:
 
-DETECTION_DISTANCE: 0.5
-RANGE: 60
+-----------------------------------------------------------------------
+Snippet(color_filter.yaml):
+``` yaml
+HUPPER: 124
+HLOWER: 43
+SUPEER: 255
+SLOWER: 56
+VUPPER: 255
+VLOWER: 83
+```
+-----------------------------------------------------------------------
+
+We also make .yaml files for following objects. Here an example of follow_ball.yaml:
+
+-----------------------------------------------------------------------
+Snippet(follow_ball.yaml):
+``` yaml
+detection_topic: /ejemplo
+movement_topic: /mobile_base/commands/velocity
+
+turning_vel: 0.5
 ```
 -----------------------------------------------------------------------
 
 ### .launch
 
-It launch the nodes, the parameters and the yamls we want to use in our program. 
-
-*include* is for other launchers, in this program we don't launch the kobuki and lidar drivers 
-because if the lidar doesn't works the kuboki works without the sensor and crashes.
-
-*node* is for our nodes and rosparam loads our yaml.
-
 -----------------------------------------------------------------------
-Snippet(launch example):
+Snippet(perception launch):
 ``` launch
 <launch>
-  <!--<include file="$(find robots)/launch/kobuki_rplidar.launch"/> -->
-  
-  <node pkg="fsm_bump_go" type="lidarBumpgo_node" name="lidarBumpgo"> 
-    <rosparam command="load" file="$(find fsm_bump_go)/config/lidarBumpGoParms.yaml"/>
-  </node>
+
+	<node pkg="visual_behavior" type="color_filter_node" name="PerceptionFilter" output="screen">
+		<rosparam command="load" file="$(find visual_behavior)/config/color_filter.yaml"/>
+	</node>
+
+	<node 
+		pkg="cameras_cpp" type="nodo_rgbd_filter" name="PerceptionCloud" output="screen">
+	</node>
+
+	<node 
+		pkg="visual_behavior" type="rgbd_tf_node" name="PerceptionTf" output="screen">
+	</node>
+
+
 </launch>
-```
------------------------------------------------------------------------
-
-### How to get the params
-
-In this program we got the params in the constructor. We used *.param* because if there is no launcher, it uses a default value.
-
-
-In the snippet we used a parameter to define wich topic we hace to suuscribe.
-
------------------------------------------------------------------------
-Snippet(Getting params example):
-``` launch
-std::string sub_sensor_topic =  n_.param("sub_sensor_path", std::string("/scan_filtered"));
 ```
 -----------------------------------------------------------------------
 

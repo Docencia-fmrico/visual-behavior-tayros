@@ -42,6 +42,8 @@ ApproachObject::halt()
 BT::NodeStatus
 ApproachObject::tick()
 {
+  std::string Target = getInput<std::string>("target").value();
+  printf("%s\n", Target.c_str());
   move_.data = 1;
   mov_pub_.publish(move_);
 

@@ -104,6 +104,14 @@ In this section you will find how movement behaviour works.
 
 The __movement node__ creates a movement object and in each loop of the while(ros::ok()) calls to MoveRobot(). This function manage a little logical behaviour based in the following points:
 
+- If movement_ value is 1, the detected object from the perception is ball
+
+- If movement value is 2, the detected object is a human.
+
+- If movement value is 0, no object has been detected.
+
+Also, if movement is not 0, the __PID Controller values__ are calculated in order to apply to the velocity.
+
 -----------------------------------------------------------------------
 Snippet(MoveRobot):
 ``` cpp
@@ -130,9 +138,9 @@ Snippet(MoveRobot):
 The following TF Listener made in get_dist_angle_tf() function "listens" to the TFs published before by the TF Broadcaster:
 
 -----------------------------------------------------------------------
-Snippet(sensorCallback):
+Snippet(get_dist_angle_tf):
 ``` cpp
-tf2_ros::Buffer buffer;
+  tf2_ros::Buffer buffer;
   tf2_ros::TransformListener listener(buffer);
   if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
  {
@@ -151,37 +159,21 @@ tf2_ros::Buffer buffer;
 ```
 -----------------------------------------------------------------------
 
-The function obtainDistance starts on the start of the array (center) and turns in a range (especificated on the yaml), and then the next for starts on the final
-value (center too) and turns the same range on the opposite side.
+If the object is detected but its too far away from the robot, dist value is NaN. We set the dist_ value (that is used in the velocity) to 1, in order to avoid the robot going backwards when we set the value for the linear velocity.
 
 -----------------------------------------------------------------------
-Snippet(obtainDistance):
+Snippet(personCallback):
 ``` cpp
-lidarBumpGo::obtainDistance(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
-  int size = msg->ranges.size();
-  center_ = 0;
-
-  float nearest_distance = 100;
-  for (int i = 0; i < range_; i++)
-  {
-    if (nearest_distance > msg->ranges[i])
-    {
-      nearest_distance = msg->ranges[i];
-      nearest_position_ = 1;  /* Turn right */
+  if(movement_ == 2){
+    dist_ = position_in->distance;
+    if(isnan(dist_)){
+      dist_ = 1;
     }
+    angle_ = position_in->angle;
+    ROS_INFO("PERSON DETECTED!");
   }
-
-  for (int i = size-1; i > (size - range_); i--)
-  {
-    if (nearest_distance > msg->ranges[i])
-    {
-        nearest_distance = msg->ranges[i];
-        nearest_position_ = 0;  /* Turn left */
-    }
-  }
-
-  return nearest_distance;
+}
 ```
 -----------------------------------------------------------------------
 

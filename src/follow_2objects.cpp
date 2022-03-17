@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   auto blackboard = BT::Blackboard::create();
   blackboard->set("object", "Prueba");
 
-  std::string pkgpath = ros::package::getPath("visual_behaviour");
+  std::string pkgpath = ros::package::getPath("visual_behavior");
   std::string xml_file = pkgpath + "/behavior_trees_xml/follow_one_object.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);

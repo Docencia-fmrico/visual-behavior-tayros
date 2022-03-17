@@ -55,11 +55,10 @@ void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image, const da
     int px = (box.xmax + box.xmin) / 2;
     int py = (box.ymax + box.ymin) / 2;
 
-    float dist = img_ptr_depth->image.at<float>(cv::Point(px, py) ); // 0.001f;
+    float dist = img_ptr_depth->image.at<float>(cv::Point(px, py)) * 0.001f; // 0.001f;
 
     float ang = -(px - CAMERA_XCENTER) / CAMERA_XCENTER;
 
-   
     if(box.Class == "person"){
       std::cerr << box.Class << " at (" << "Dist: "<< dist << " Ang: " <<ang << std::endl;
       person_pos.angle = ang;

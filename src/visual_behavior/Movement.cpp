@@ -37,7 +37,7 @@ Movement::Movement()
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
   mov_sub_ = n.subscribe<std_msgs::Int32>("/visual_behavior/move_tf", 1, &Movement::callback, this);
   person_sub_ = n.subscribe<visual_behavior::position>("/visual_behavior/person/position", 1, &Movement::personCallback, this);
-  movement_ = 1;
+  movement_ = 0;
 }
 
 void
@@ -82,6 +82,7 @@ Movement::personCallback(const visual_behavior::position::ConstPtr& position_in)
 void
 Movement::MoveRobot()
 {
+  ROS_INFO("%d", movement_);
   if (movement_ == 1)
   {
       get_dist_angle_tf();

@@ -16,6 +16,7 @@
 #include <string>
 
 #include "behavior_trees/Turn.h"
+#include "geometry_msgs/Twist.h"
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 
@@ -25,8 +26,9 @@ namespace behavior_trees
 {
 
 Turn::Turn(const std::string& name)
-: BT::ActionNodeBase(name, {}), counter_(0)
+: BT::ActionNodeBase(name, {})
 {
+  vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
 }
 
 void
@@ -38,16 +40,11 @@ Turn::halt()
 BT::NodeStatus
 Turn::tick()
 {
-  ROS_INFO("Turn tick %d", counter_);
-
-  if (counter_++ < 5)
-  {
-    return BT::NodeStatus::RUNNING;
-  }
-  else
-  {
-    return BT::NodeStatus::SUCCESS;
-  }
+  ROS_INFO("Girando");
+  geometry_msgs::Twist vel_msgs;
+  vel_msgs.angular.z = 0.4;
+  vel_pub_.publish(vel_msgs);
+  return BT::NodeStatus::SUCCESS;
 }
 
 }  // namespace behavior_trees

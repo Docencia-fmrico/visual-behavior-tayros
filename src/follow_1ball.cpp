@@ -33,14 +33,14 @@ int main(int argc, char **argv)
   BT::SharedLibrary loader;
 
   factory.registerFromPlugin(loader.getOSName("approach_object_bt_node"));
-  factory.registerFromPlugin(loader.getOSName("calculate_distance_bt_node"));
-  factory.registerFromPlugin(loader.getOSName("detect_object_bt_node"));
   factory.registerFromPlugin(loader.getOSName("detect_ball_bt_node"));
 
   factory.registerFromPlugin(loader.getOSName("turn_bt_node"));
 
+  auto blackboard = BT::Blackboard::create();
+
   std::string pkgpath = ros::package::getPath("visual_behavior");
-  std::string xml_file = pkgpath + "/behavior_trees_xml/follow_two_objects.xml";
+  std::string xml_file = pkgpath + "/behavior_trees_xml/follow_one_ball.xml";
 
   BT::Tree tree = factory.createTreeFromFile(xml_file);
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, 1666, 1667);

@@ -18,6 +18,8 @@
 
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
+#include "ros/ros.h"
+#include "geometry_msgs/Twist.h"
 
 #include <string>
 
@@ -34,7 +36,8 @@ class Turn : public BT::ActionNodeBase
     BT::NodeStatus tick();
 
   private:
-    int counter_;
+    ros::Publisher vel_pub_;
+    ros::NodeHandle n;
 };
 
 }  // namespace behavior_trees

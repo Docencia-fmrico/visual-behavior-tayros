@@ -96,8 +96,8 @@ add_library(${PROJECT_NAME}
   src/visual_behavior/transforms.cpp)
 
 add_library(approach_object_bt_node SHARED src/behavior_tree_nodes/ApproachObject.cpp)
-add_library(calculate_distance_bt_node SHARED src/behavior_tree_nodes/CalculateDistance.cpp)
 add_library(detect_object_bt_node SHARED src/behavior_tree_nodes/DetectObject.cpp )
+add_library(detect_ball_bt_node SHARED src/behavior_tree_nodes/DetectBall.cpp )
 add_library(turn_bt_node SHARED src/behavior_tree_nodes/Turn.cpp)
 
 add_executable(color_filter_node src/color_filter_node.cpp)
@@ -118,16 +118,17 @@ target_link_libraries(bbx_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 add_executable(movement_node src/movement_node.cpp)
 add_executable(follow_1object src/follow_1object.cpp)
 add_executable(follow_2objects src/follow_2objects.cpp)
+add_executable(follow_1ball src/follow_1ball.cpp)
 
 target_link_libraries(movement_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 target_link_libraries(follow_1object ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
 target_link_libraries(follow_2objects ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
-
+target_link_libraries(follow_1ball ${catkin_LIBRARIES} ${ZMQ_LIBRARIES})
 
 list(APPEND plugin_libs
   approach_object_bt_node
-  calculate_distance_bt_node
   detect_object_bt_node
+  detect_ball_bt_node
   turn_bt_node
 )
 
@@ -161,6 +162,7 @@ roslint_cpp(
   src/visual_behavior/transforms.cpp include/visual_behavior/transforms.h
   src/movement_node.cpp
   src/follow_1object.cpp
+  src/follow_1ball.cpp
   src/follow_2objects.cpp
 )
 

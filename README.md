@@ -2,7 +2,7 @@
 # visual_behaviour
 
 <div align="center">
-<img width=400px src="https://github.com/Docencia-fmrico/bump-and-go-with-fsm-tayros/blob/main/resources/kuboki.jpg?raw=true" alt="explode"></a>
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/xtion.jpg?raw=true" alt="explode"></a>
 </div>
 
 <h3 align="center">Bump And Go </h3>
@@ -15,48 +15,52 @@
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
-- [How to execute the programs](#How-to-execute-the-programs)
-- [Behavior Tree diagram](#Behavior-Tree-Diagram)
+- [Behavior Tree diagram](#behavior-tree-diagram)
 - [Perception](#perception)
 - [Movement](#movement)
 - [Logic](#logic)
-- [Parameters](#Parameters)
+- [Parameters](#parameters)
 - [Team](#team)
 - [Licencia](#licencia)
-
-
-## How to execute the programs
-
-<div align="center">
-<img width=600px src="https://github.com/Docencia-fmrico/bump-and-go-with-fsm-tayros/blob/main/resources/FibalBumpGo_launch.gif?raw=true" alt="explode"></a>
-</div>
-
-First connect the base and the camera, then :
------------------------------------------------------------------------
-Snippet(launch base):
-``` bash
-roslaunch kobuki_node minimal.launch # Driver of the kobuki
-roslaunch LANZAR_TODO
-```
------------------------------------------------------------------------
 
 ## Behavior Tree Diagram 
 
 In the following image you can see the Behaviour Tree made in __Groot__:
 
 ### Follow Human
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyPerson.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
 
 The first objective was to make the robot follow a human using Bounding Boxes from __DarknetROS__
 
 You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EfThSuSHDLZBiZ6kEb4ogJ0Bm4t4KhwBVoKoPJDNyGEI_Q?e=aUXScF)
 
 ### Follow Ball
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyBall.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
 
 Another objective of this project was to make the robot able to follow a ball using __TFs__ and __color filtering__.
 
 You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/ESpUkj2sZzxAj7NWjWMu_iUB9z5rCxZEkpkqZmBAzyWIUA?e=uqVJLe)
 
 ### Human & Ball
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchPersonAndBall.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
 
 The last objective was to make the robot able to follow both ball and human, but giving preference to the ball.
 

@@ -1,0 +1,13 @@
+<launch>
+
+    <include file="$(find visual_behavior)/launch/human_perception.launch"/> 
+
+    <node 
+		pkg="visual_behavior" type="movement_node" name="Movement" output="screen">
+	  </node>
+
+    <node 
+		pkg="visual_behavior" type="follow_1object" name="BTperson" output="screen">
+	  </node>
+
+</launch>

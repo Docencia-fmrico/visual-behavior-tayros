@@ -90,7 +90,6 @@ add_library(${PROJECT_NAME}
   src/ball_perception/RGBDFilter.cpp
   src/ball_perception/RGBDtf.cpp
   src/human_perception/BBXDetector.cpp
-  src/human_perception/BBXToTf.cpp
   src/visual_behavior/Movement.cpp
   src/visual_behavior/PIDController.cpp
   src/visual_behavior/transforms.cpp)
@@ -112,8 +111,6 @@ target_link_libraries(rgbd_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 add_executable(bbx_detector_node src/bbx_detector_node.cpp)
 target_link_libraries(bbx_detector_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
-add_executable(bbx_tf_node src/bbx_tf_node.cpp)
-target_link_libraries(bbx_tf_node ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 add_executable(movement_node src/movement_node.cpp)
 add_executable(follow_1object src/follow_1object.cpp)
@@ -145,25 +142,27 @@ roslint_cpp(
   src/rgbd_filter_node.cpp
   src/rgbd_tf_node.cpp
   src/bbx_detector_node.cpp
-  src/bbx_tf_node.cpp
+  src/follow_1object.cpp
+  src/follow_1ball.cpp
+  src/follow_2objects.cpp
+  src/movement_node.cpp
 
   src/ball_perception/ColorFilter.cpp
   src/ball_perception/RGBDFilter.cpp
   src/ball_perception/RGBDtf.cpp
   src/human_perception/BBXDetector.cpp
-  src/human_perception/BBXToTf.cpp
+  src/visual_behavior/transforms.cpp
+  src/visual_behavior/PIDController.cpp
+  src/visual_behavior/Movement.cpp
+
 
   include/ball_perception/ColorFilter.h
   include/ball_perception/RGBDFilter.h
   include/ball_perception/RGBDtf.h
   include/human_perception/BBXDetector.h
-  include/human_perception/BBXToTf.h
-  
-  src/visual_behavior/transforms.cpp include/visual_behavior/transforms.h
-  src/movement_node.cpp
-  src/follow_1object.cpp
-  src/follow_1ball.cpp
-  src/follow_2objects.cpp
+  include/visual_behavior/Movement.h
+  include/visual_behavior/PIDController.h
+  include/visual_behavior/transforms.h
 )
 
 set(LINK_LIBS

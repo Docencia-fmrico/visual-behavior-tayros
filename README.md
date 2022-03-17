@@ -15,56 +15,13 @@
 
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
-- [Behavior Tree diagram](#behavior-tree-diagram)
 - [Perception](#perception)
 - [Movement](#movement)
 - [Logic](#logic)
+- [Behavior Tree diagram](#behavior-tree-diagram)
 - [Parameters](#parameters)
 - [Team](#team)
 - [Licencia](#licencia)
-
-## Behavior Tree Diagram 
-
-In the following image you can see the Behaviour Tree made in __Groot__:
-
-### Follow Human
------------------------------------------------------------------------
-**Execution**:
-<div align="center">
-<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyPerson.gif?raw=true" alt="explode"></a>
-</div>
-
------------------------------------------------------------------------
-
-The first objective was to make the robot follow a human using Bounding Boxes from __DarknetROS__
-
-You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EfThSuSHDLZBiZ6kEb4ogJ0Bm4t4KhwBVoKoPJDNyGEI_Q?e=aUXScF)
-
-### Follow Ball
------------------------------------------------------------------------
-**Execution**:
-<div align="center">
-<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyBall.gif?raw=true" alt="explode"></a>
-</div>
-
------------------------------------------------------------------------
-
-Another objective of this project was to make the robot able to follow a ball using __TFs__ and __color filtering__.
-
-You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/ESpUkj2sZzxAj7NWjWMu_iUB9z5rCxZEkpkqZmBAzyWIUA?e=uqVJLe)
-
-### Human & Ball
------------------------------------------------------------------------
-**Execution**:
-<div align="center">
-<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchPersonAndBall.gif?raw=true" alt="explode"></a>
-</div>
-
------------------------------------------------------------------------
-
-The last objective was to make the robot able to follow both ball and human, but giving preference to the ball.
-
-You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EVsVHefVfa5KqGEOiqivIgIBhYkk-oGhJcOQpwDXBEjMWg?e=eNcInM)
 
 ## Perception
 
@@ -154,11 +111,11 @@ In this section you will find how movement behaviour works.
 
 The __movement node__ creates a movement object and in each loop of the while(ros::ok()) calls to MoveRobot(). This function manage a little logical behaviour based in the following points:
 
-- If movement_ value is 1, the detected object from the perception is ball
+- If movement_ value is STOP(0), no object has been detected.
 
-- If movement value is 2, the detected object is a human.
+- If movement_ value is BALL(1), the detected object from the perception is ball
 
-- If movement value is 0, no object has been detected.
+- If movement_ value is PERSON(2), the detected object is a human.
 
 Also, if movement is not 0, the __PID Controller values__ are calculated in order to apply to the velocity.
 
@@ -230,6 +187,49 @@ Snippet(personCallback):
 [Funcionamiento](https://urjc-my.sharepoint.com/:v:/g/personal/a_madinabeitia_2020_alumnos_urjc_es/EVJ-py7o05lFue8xN7RCl_sBfrTUU4eoEiLc4CIp1Q89Qw?e=f0PQHP)
 
 ## Logic
+
+## Behavior Tree Diagram 
+
+In the following image you can see the Behaviour Tree made in __Groot__:
+
+### Follow Human
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyPerson.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
+
+The first objective was to make the robot follow a human using Bounding Boxes from __DarknetROS__
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EfThSuSHDLZBiZ6kEb4ogJ0Bm4t4KhwBVoKoPJDNyGEI_Q?e=aUXScF)
+
+### Follow Ball
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchOnlyBall.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
+
+Another objective of this project was to make the robot able to follow a ball using __TFs__ and __color filtering__.
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/ESpUkj2sZzxAj7NWjWMu_iUB9z5rCxZEkpkqZmBAzyWIUA?e=uqVJLe)
+
+### Human & Ball
+-----------------------------------------------------------------------
+**Execution**:
+<div align="center">
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/LaunchPersonAndBall.gif?raw=true" alt="explode"></a>
+</div>
+
+-----------------------------------------------------------------------
+
+The last objective was to make the robot able to follow both ball and human, but giving preference to the ball.
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EVsVHefVfa5KqGEOiqivIgIBhYkk-oGhJcOQpwDXBEjMWg?e=eNcInM)
 
 ## Parameters
 We used .yaml and .launch files:

@@ -16,7 +16,10 @@
 ## Table of Contents
 - [Table of Contents](#table-of-contents)
 - [How to execute the programs](#How-to-execute-the-programs)
-- [Behaviour Tree diagram](#BTdiagram)
+- [Behavior Tree diagram](#Behavior-Tree-Diagram)
+- [Follow Human](#Follow-Human)
+- [Follow Ball](#Follow-Ball)
+- [Ball & Human](#Ball-&-Human)
 - [Perception](#perception)
 - [Movement](#movement)
 - [Logic](#logic)
@@ -40,9 +43,27 @@ roslaunch LANZAR_TODO
 ```
 -----------------------------------------------------------------------
 
-## Behaviour Tree diagram 
+## Behavior Tree Diagram 
 
 In the following image you can see the Behaviour Tree made in __Groot__:
+
+## Follow Human
+
+The first objective was to make the robot follow a human using Bounding Boxes from __DarknetROS__
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EfThSuSHDLZBiZ6kEb4ogJ0Bm4t4KhwBVoKoPJDNyGEI_Q?e=aUXScF)
+
+## Follow Ball
+
+Another objective of this project was to make the robot able to follow a ball using __TFs__ and __color filtering__.
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/ESpUkj2sZzxAj7NWjWMu_iUB9z5rCxZEkpkqZmBAzyWIUA?e=uqVJLe)
+
+## Human & Ball
+
+The last objective was to make the robot able to follow both ball and human, but giving preference to the ball.
+
+You can watch a short demonstration in the following [video](https://urjc-my.sharepoint.com/:v:/g/personal/s_navajas_2020_alumnos_urjc_es/EVsVHefVfa5KqGEOiqivIgIBhYkk-oGhJcOQpwDXBEjMWg?e=eNcInM)
 
 ## Perception
 

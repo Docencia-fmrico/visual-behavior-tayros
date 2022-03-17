@@ -36,8 +36,9 @@ Movement::Movement()
 {
   vel_pub_ = n.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 100);
   mov_sub_ = n.subscribe<std_msgs::Int32>("/visual_behavior/move_tf", 1, &Movement::callback, this);
-  person_sub_ = n.subscribe<visual_behavior::position>("/visual_behavior/person/position", 1, &Movement::personCallback, this);
-  movement_ = 0;
+  person_sub_ = n.subscribe<visual_behavior::position>("/visual_behavior/person/position",
+    1, &Movement::personCallback, this);
+  movement_ = STOP;
 }
 
 void
@@ -52,13 +53,13 @@ Movement::get_dist_angle_tf()
   tf2_ros::Buffer buffer;
   tf2_ros::TransformListener listener(buffer);
   if (buffer.canTransform("base_footprint", "object/0", ros::Time(0), ros::Duration(1), &error_))
- {
+  {
     bf2object_msg_ = buffer.lookupTransform("base_footprint", "object/0", ros::Time(0));
 
     tf2::fromMsg(bf2object_msg_, bf2object_);
 
     dist_ = bf2object_.getOrigin().length();
-    angle_ = atan2(bf2object_.getOrigin().y(),bf2object_.getOrigin().x());
+    angle_ = atan2(bf2object_.getOrigin().y(), bf2object_.getOrigin().x());
     }
     else
     {
@@ -70,29 +71,41 @@ Movement::get_dist_angle_tf()
 void
 Movement::personCallback(const visual_behavior::position::ConstPtr& position_in)
 {
-  if(movement_ == 2){
+  if (movement_ == PERSON)
+  {
     dist_ = position_in->distance;
-    if(isnan(dist_)){
+    if (isnan(dist_))
+    {
       dist_ = 1;
     }
-    else if(dist_ > 5){
+    else if (dist_ > 5)
+    {
       dist_ = 5;
     }
     angle_ = position_in->angle;
-    ROS_INFO("PERSON DETECTED!");
   }
 }
 
 void
 Movement::MoveRobot()
 {
-  ROS_INFO("%d", movement_);
-  if (movement_ == 1)
+  if (movement_ == BALL)
   {
-      get_dist_angle_tf();
+    ROS_INFO("FOLLOWING: BALL");
+    get_dist_angle_tf();
   }
 
-  if (movement_ != 0)
+  else if (movement_ == PERSON)
+  {
+    ROS_INFO("FOLLOWING: PERSON");
+  }
+
+  else if (movement_ == STOP)
+  {
+    ROS_INFO("STOP");
+  }
+
+  if (movement_ != STOP)
   {
     double control_pan = pan_pid_.get_output(angle_);
     double control_tilt = tilt_pid_.get_output(dist_);

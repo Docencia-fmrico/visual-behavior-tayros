@@ -147,14 +147,11 @@ roslint_cpp(
   src/follow_2objects.cpp
   src/movement_node.cpp
 
-  src/ball_perception/ColorFilter.cpp
-  src/ball_perception/RGBDFilter.cpp
   src/ball_perception/RGBDtf.cpp
   src/human_perception/BBXDetector.cpp
   src/visual_behavior/transforms.cpp
   src/visual_behavior/PIDController.cpp
   src/visual_behavior/Movement.cpp
-
 
   include/ball_perception/ColorFilter.h
   include/ball_perception/RGBDFilter.h

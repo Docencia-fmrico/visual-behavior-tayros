@@ -47,15 +47,23 @@ PIDController::get_output(double new_reference)
 
   // Proportional Error
   double direction = 0.0;
-  if (ref != 0.0) {
+  if (ref != 0.0)
+  {
     direction = ref / fabs(ref);
   }
 
-  if (fabs(ref) < min_ref_) {
+  if (fabs(ref) < min_ref_)
+  {
     output = 0.0;
-  } else if (fabs(ref) > max_ref_) {
+  }
+
+  else if (fabs(ref) > max_ref_)
+  {
     output = direction * max_output_;
-  } else {
+  }
+
+  else
+  {
     output = direction * min_output_ + ref * (max_output_ - min_output_);
   }
 

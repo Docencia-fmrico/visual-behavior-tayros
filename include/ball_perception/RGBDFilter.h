@@ -62,6 +62,6 @@ private:
 
   HSVInfo hsvFilters_[MAX_CHANNELS];
 };
-}
+}  // namespace ball_perception
 
 #endif  // BALL_PERCEPTION_RGBDFILTER_H

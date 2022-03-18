@@ -46,9 +46,7 @@ DetectObject::halt()
 BT::NodeStatus
 DetectObject::tick()
 {
-  ROS_INFO("2 detected");
   
-
   if (person_)
   {
     setOutput<std::string>("object", "Human");

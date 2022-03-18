@@ -28,9 +28,9 @@ namespace human_perception
 
 BBXDetector::BBXDetector()
 : nh(),
- workingFrameId_("/base_footprint"),
+  workingFrameId_("/base_footprint"),
   TopicID("/visual_behavior/person/position"),
-  image_depth_sub(nh, "/camera/depth/image_raw", 1), 
+  image_depth_sub(nh, "/camera/depth/image_raw", 1),
   bbx_sub(nh, "/darknet_ros/bounding_boxes", 1),
   sync_bbx(MySyncPolicy_bbx(10), image_depth_sub, bbx_sub)
   {
@@ -38,11 +38,13 @@ BBXDetector::BBXDetector()
     sync_bbx.registerCallback(boost::bind(&BBXDetector::callback_bbx, this, _1, _2));
   }
 
-void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image, const darknet_ros_msgs::BoundingBoxesConstPtr& boxes)
+void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image,
+  const darknet_ros_msgs::BoundingBoxesConstPtr& boxes)
 {
   cv_bridge::CvImagePtr img_ptr_depth;
 
-  try{
+  try
+  {
       img_ptr_depth = cv_bridge::toCvCopy(*image, sensor_msgs::image_encodings::TYPE_32FC1);
   }
   catch (cv_bridge::Exception& e)
@@ -50,8 +52,9 @@ void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image, const da
       ROS_ERROR("cv_bridge exception:  %s", e.what());
       return;
   }
-  
-  for (const auto & box : boxes->bounding_boxes) {
+
+  for (const auto & box : boxes->bounding_boxes)
+  {
     int px = (box.xmax + box.xmin) / 2;
     int py = (box.ymax + box.ymin) / 2;
 
@@ -59,7 +62,8 @@ void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image, const da
 
     float ang = -(px - CAMERA_XCENTER) / CAMERA_XCENTER;
 
-    if(box.Class == "person"){
+    if (box.Class == "person")
+    {
       std::cerr << box.Class << " at (" << "Dist: "<< dist << " Ang: " <<ang << std::endl;
       person_pos.angle = ang;
       person_pos.distance = dist;
@@ -68,7 +72,6 @@ void BBXDetector::callback_bbx(const sensor_msgs::ImageConstPtr& image, const da
       person_pos.header.stamp = ros::Time::now();
       position_pub.publish(person_pos);
     }
-
   }
 }
-}
+}  // namespace human_perception

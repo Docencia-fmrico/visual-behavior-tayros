@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef VISUAL_BEHAVIOUR_MOVEMENT_H
-#define VISUAL_BEHAVIOUR_MOVEMENT_H
+#ifndef VISUAL_BEHAVIOR_MOVEMENT_H
+#define VISUAL_BEHAVIOR_MOVEMENT_H
 
 #include <string>
 #include "tf2/transform_datatypes.h"
@@ -42,7 +42,6 @@ public:
     ros::NodeHandle n;
 
 private:
-
     ros::Publisher vel_pub_;
     ros::Subscriber mov_sub_;
     ros::Subscriber person_sub_;
@@ -55,13 +54,18 @@ private:
     tf2::Stamped<tf2::Transform> bf2object_;
     std::string error_;
 
+    const int STOP = 0;
+    const int BALL = 1;
+    const int PERSON = 2;
+
+
     double dist_;
     double angle_;
     int movement_;
 
     br2_tracking::PIDController pan_pid_, tilt_pid_;
 };
-    
+
 }  // namespace visual_behavior
 
-#endif // VISUAL_BEHAVIOUR_MOVEMENT_H
+#endif  // VISUAL_BEHAVIOR_MOVEMENT_H

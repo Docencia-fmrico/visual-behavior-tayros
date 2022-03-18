@@ -58,6 +58,7 @@ private:
   std::string workingFrameId_;
   std::string cameraTopicId_;
 };
-}
+}  // namespace ball_perception
 
 #endif  // BALL_PERCEPTION_RGBDTF_H
+

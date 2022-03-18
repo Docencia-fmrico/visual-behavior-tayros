@@ -5,7 +5,7 @@
 <img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/xtion.jpg?raw=true" alt="explode"></a>
 </div>
 
-<h3 align="center"> Viusal Behavior </h3>
+<h3 align="center"> Visual Behavior </h3>
 
 <div align="center">
 <img width=100px src="https://img.shields.io/badge/status-finished-brightgreen" alt="explode"></a>

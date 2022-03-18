@@ -190,10 +190,14 @@ In the following image you can see the Behaviour Tree made in __Groot__:
 
 ### Follow Human
 
+<div align="center">
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowHuman.png?raw=true" alt="explode"></a>
+</div>
+
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowHuman.png?raw=true" alt="explode"></a>
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/main/resources/LaunchOnlyPerson.gif?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
@@ -206,12 +210,14 @@ You can watch a short demonstration in the following [video](https://urjc-my.sha
 
 ### Follow Ball
 
-
+<div align="center">
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowBall.png?raw=true" alt="explode"></a>
+</div>
 
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTfollowBall.png?raw=true" alt="explode"></a>
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/main/resources/LaunchOnlyBall.gif?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
@@ -224,10 +230,14 @@ You can watch a short demonstration in the following [video](https://urjc-my.sha
 
 ### Human & Ball
 
+<div align="center">
+<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTFollowBoth.png?raw=true" alt="explode"></a>
+</div>
+
 -----------------------------------------------------------------------
 **Execution**:
 <div align="center">
-<img width=600px height=655px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/readme/resources/BTFollowBoth.png?raw=true" alt="explode"></a>
+<img width=600px src="https://github.com/Docencia-fmrico/visual-behavior-tayros/blob/main/resources/LaunchPersonAndBall.gif?raw=true" alt="explode"></a>
 </div>
 
 -----------------------------------------------------------------------
